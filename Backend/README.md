@@ -29,10 +29,12 @@ Send a JSON object with the following structure:
 
 #### **Field Requirements**
 
-- `fullname.firstname` (string, required): Minimum 3 characters.
-- `fullname.lastname` (string, optional): Minimum 3 characters if provided.
-- `email` (string, required): Must be a valid email address.
-- `password` (string, required): Minimum 6 characters.
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `password` (string): User's password (minimum 6 characters).
 
 ---
 
@@ -108,6 +110,9 @@ Authenticates a user and returns a JWT token if the credentials are valid.
 
 Send a JSON object with the following structure:
 
+- `email` (string, required):User's email address (must be a valid email).
+- `password` (string,required): User's password (minimum 6 characters).
+
 ```json
 {
   "email": "john.doe@example.com",
@@ -117,8 +122,13 @@ Send a JSON object with the following structure:
 
 #### **Field Requirements**
 
-- `email` (string, required): Must be a valid email address.
-- `password` (string, required): Minimum 6 characters.
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `password` (string): User's password (minimum 6 characters).
+- `token` (String): JWT Token
 
 ---
 
@@ -181,6 +191,126 @@ curl -X POST http://localhost:3000/users/login \
     "email": "jane.smith@example.com",
     "password": "securepassword"
   }'
+```
+
+---
+
+---
+
+## `/users/profile` Endpoint
+
+### Description
+
+Retrieves the profile information of the currently authenticated user.
+**Requires authentication via JWT token.**
+
+### HTTP Method
+
+`GET`
+
+---
+
+### **Authentication**
+
+Requires a valid JWT token in the Authorization header: `Authorization: Bearer <jwt_token>`
+
+---
+
+### **Responses**
+
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+
+#### **200 OK**
+
+- **Description:** Returns the user's profile.
+- **Body:**
+  ```json
+  {
+    "_id": "<user_id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": null
+  }
+  ```
+
+#### **401 Unauthorized**
+
+- **Description:** Missing or invalid token.
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/users/profile \
+  -H "Authorization: Bearer <jwt_token>"
+```
+
+---
+
+---
+
+## `/users/logout` Endpoint
+
+### Description
+
+Logout the current user and blacklist the token provided in cookie or headers
+**Requires authentication via JWT token.**
+
+### HTTP Method
+
+`GET`
+
+---
+
+### **Headers**
+
+Requires a valid JWT token in the Authorization header or cookie:
+
+- `Authorization: Bearer <jwt_token>`
+
+---
+
+#### **200 OK**
+
+- **Description:** User logged out successfully.
+- **Body:**
+  ```json
+  {
+    "message": "Logged Out"
+  }
+  ```
+
+#### **401 Unauthorized**
+
+- **Description:** Missing or invalid token.
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/users/logout \
+  -H "Authorization: Bearer <jwt_token>"
 ```
 
 ---
