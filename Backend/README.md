@@ -88,6 +88,10 @@ curl -X POST http://localhost:3000/users/register \
   }'
 ```
 
+---
+
+---
+
 ## `/users/login` Endpoint
 
 ### Description
