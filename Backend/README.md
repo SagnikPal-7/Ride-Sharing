@@ -329,7 +329,6 @@ Registers a new captain (driver) with vehicle information in the Ride-Sharing ap
 
 ---
 
-
 ### **Request Body**
 
 The request body should be in JSON format and include the following fields:
@@ -453,6 +452,236 @@ curl -X POST http://localhost:3000/captains/register \
       "vehicleType": "auto"
     }
   }'
+```
+
+---
+
+---
+
+## `/captains/login` Endpoint
+
+### Description
+
+Authenticates a captain and returns a JWT token if the credentials are valid.
+
+### HTTP Method
+
+`POST`
+
+---
+
+### **Request Body**
+
+```json
+{
+  "email": "john.doe@example.com", // string, required, must be a valid email
+  "password": "yourpassword" // string, required, min 6 chars
+}
+```
+
+---
+
+### **Responses**
+
+- `captain` (object):
+  - `fullname` (object).
+    - `firstname` (string): Captain's first name (minimum 3 characters).
+    - `lastname` (string): Captain's last name (minimum 3 characters).
+  - `email` (string): Captain's email address (must be a valid email).
+  - `password` (string): Captain's password (minimum 6 characters).
+  - `vehicle` (object):
+    - `color` (string): Vehicle color.
+    - `plate` (string): Vehicle plate number.
+    - `capacity` (number): Vehicle passenger capacity.
+    - `vehicleType` (string): Type of vehicle.
+- `token` (String): JWT Token
+
+#### **200 OK**
+
+```json
+{
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "<captain_id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "socketId": null
+  }
+}
+```
+
+#### **400 Bad Request**
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      "location": "body"
+    }
+    // ...other errors
+  ]
+}
+```
+
+#### **401 Unauthorized**
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X POST http://localhost:3000/captains/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane.smith@example.com",
+    "password": "securepassword"
+  }'
+```
+
+---
+
+---
+
+## `/captains/profile` Endpoint
+
+### Description
+
+Retrieves the profile information of the currently authenticated captain.  
+**Requires authentication via JWT token.**
+
+### HTTP Method
+
+`GET`
+
+---
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>`
+
+---
+
+### **Responses**
+
+- `captain` (object):
+  - `fullname` (object).
+    - `firstname` (string): Captain's first name (minimum 3 characters).
+    - `lastname` (string): Captain's last name (minimum 3 characters).
+  - `email` (string): Captain's email address (must be a valid email).
+  - `vehicle` (object):
+    - `color` (string): Vehicle color.
+    - `plate` (string): Vehicle plate number.
+    - `capacity` (number): Vehicle passenger capacity.
+    - `vehicleType` (string): Type of vehicle.
+
+#### **200 OK**
+
+```json
+{
+  "captain": {
+    "_id": "<captain_id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "socketId": null
+  }
+}
+```
+
+#### **401 Unauthorized**
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/captains/profile \
+  -H "Authorization: Bearer <jwt_token>"
+```
+
+---
+
+---
+
+## `/captains/logout` Endpoint
+
+### Description
+
+Logs out the authenticated captain by blacklisting their JWT token for 24 hours.  
+**Requires authentication via JWT token.**
+
+### HTTP Method
+
+`GET`
+
+---
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>`
+
+---
+
+### **Responses**
+
+- `message` (string): Logout successfully.
+
+#### **200 OK**
+
+```json
+{
+  "message": "Logout Successfully"
+}
+```
+
+#### **401 Unauthorized**
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/captains/logout \
+  -H "Authorization: Bearer <jwt_token>"
 ```
 
 ---
