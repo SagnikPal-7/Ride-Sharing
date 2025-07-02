@@ -40,6 +40,14 @@ Send a JSON object with the following structure:
 
 ### **Responses**
 
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `password` (string): User's password (minimum 6 characters).
+- `token` (String): JWT Token
+
 #### **201 Created**
 
 - **Description:** User registered successfully.
@@ -133,6 +141,14 @@ Send a JSON object with the following structure:
 ---
 
 ### **Responses**
+
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `password` (string): User's password (minimum 6 characters).
+- `token` (String): JWT Token
 
 #### **200 OK**
 
