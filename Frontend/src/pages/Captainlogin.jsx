@@ -14,6 +14,7 @@ const Captainlogin = () => {
       email: email,
       password: password,
     });
+
     setEmail("");
     setPassword("");
   };
@@ -49,7 +50,7 @@ const Captainlogin = () => {
             type="password"
             placeholder="password"
           />
-          <button className="bg-[#111] text-white font-semibold  mb-4 rounded px-4 py-2 w-full text-lg placeholder:text-base">
+          <button className="bg-[#111] text-white font-semibold  mb-4 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base">
             Login
           </button>
         </form>
@@ -65,7 +66,7 @@ const Captainlogin = () => {
       <div>
         <Link
           to="/login"
-          className="bg-[#d5622d] flex items-center justify-center text-white font-semibold  mb-5 rounded px-4 py-2 w-full text-lg placeholder:text-base"
+          className="bg-[#d5622d] flex items-center justify-center text-white font-semibold  mb-5 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base"
         >
           Sign in as User
         </Link>

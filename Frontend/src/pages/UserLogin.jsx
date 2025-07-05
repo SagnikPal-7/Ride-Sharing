@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [useData, setUserData] = useState({});
+  const [userData, setUserData] = useState({});
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -14,6 +14,7 @@ const UserLogin = () => {
       email: email,
       password: password,
     });
+
     setEmail("");
     setPassword("");
   };
@@ -49,7 +50,7 @@ const UserLogin = () => {
             type="password"
             placeholder="password"
           />
-          <button className="bg-[#111] text-white font-semibold  mb-4 rounded px-4 py-2 w-full text-lg placeholder:text-base">
+          <button className="bg-[#111] text-white font-semibold  mb-4 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base">
             Login
           </button>
         </form>
@@ -65,7 +66,7 @@ const UserLogin = () => {
       <div>
         <Link
           to="/captain-login"
-          className="bg-[#10b461] flex items-center justify-center text-white font-semibold  mb-5 rounded px-4 py-2 w-full text-lg placeholder:text-base"
+          className="bg-[#10b461] flex items-center justify-center text-white font-semibold  mb-5 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base"
         >
           Sign in as Captain
         </Link>
