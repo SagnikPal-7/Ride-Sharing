@@ -10,16 +10,16 @@ import auto from "../assets/Auto.png";
 const RidePopUp = (props) => {
   return (
     <div>
-      <h5
+      {/* <h5
         onClick={() => {
           props.setRidePopupPanel(false);
         }}
         className="p-1 w-[93%] text-center absolute top-0"
       >
         <i className="text-3xl text-gray-400 ri-arrow-down-wide-fill"></i>
-      </h5>
+      </h5> */}
 
-      <h3 className="text-2xl font-semibold ml-2 mb-1 mt-5">
+      <h3 className="text-2xl font-semibold ml-2 mb-1 mt-3">
         {/* mt-3 */}
         New Ride Available
       </h3>
@@ -118,8 +118,10 @@ const RidePopUp = (props) => {
         </button>
 
         <button
-          //   onClick={() => {
-          //   }}
+          onClick={() => {
+            props.setConfirmRidePopupPanel(true);
+            props.setRidePopupPanel(false);
+          }}
           className="w-1/2 bg-yellow-400 text-black font-semibold p-2 rounded-lg"
         >
           Accept
