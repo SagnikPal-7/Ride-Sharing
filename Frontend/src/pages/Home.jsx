@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import logo from "../assets/logo.png";
-
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -37,7 +37,7 @@ const Home = () => {
     function () {
       if (panelOpen) {
         gsap.to(panelRef.current, {
-          height: "55%",
+          height: "45%",
           opacity: 1,
           padding: 24,
         });
@@ -118,6 +118,11 @@ const Home = () => {
     [waitingForDriver]
   );
 
+  function findTrip() {
+    setVehiclePanel(true);
+    setPanelOpen(false);
+  }
+
   return (
     <div className="h-screen relative overflow-hidden">
       <div>
@@ -140,7 +145,7 @@ const Home = () => {
       </div>
 
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
-        <div className="h-[30%] p-6 bg-white rounded-tl-3xl rounded-tr-3xl relative">
+        <div className="h-[37%] p-6 bg-white rounded-tl-3xl rounded-tr-3xl relative">
           <h5
             ref={panelCloseRef}
             onClick={() => {
@@ -156,8 +161,8 @@ const Home = () => {
               submitHandler(e);
             }}
           >
-            <div className="line absolute h-13 w-1 top-[45%] left-10 bg-gray-800"></div>
-            <div className="line absolute h-3 w-3 rounded-2xl top-[43%] left-9 bg-gray-800"></div>
+            <div className="line absolute h-13 w-1 top-[36%] left-10 bg-gray-800"></div>
+            <div className="line absolute h-3 w-3 rounded-2xl top-[35%] left-9 bg-gray-800"></div>
             <input
               onClick={() => {
                 setPanelOpen(true);
@@ -170,7 +175,7 @@ const Home = () => {
               type="text"
               placeholder="Add a pick-up location"
             />
-            <div className="line absolute h-3 w-3 top-[68%] left-8">
+            <div className="line absolute h-3 w-3 top-[55%] left-8">
               <i className="ri-map-pin-fill text-xl text-gray-800"></i>
             </div>
             <input
@@ -186,6 +191,12 @@ const Home = () => {
               placeholder="Enter your destination"
             />
           </form>
+          <button
+            onClick={findTrip}
+            className="bg-black text-white px-4 py-2 rounded-xl mt-4 w-full"
+          >
+            Find Trip
+          </button>
         </div>
 
         <div
