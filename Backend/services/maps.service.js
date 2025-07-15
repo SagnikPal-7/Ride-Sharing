@@ -69,7 +69,7 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
       throw new Error("Unable to feth suggestions");
     }
   } catch (error) {
-    console.log(err);
-    throw err;
+    console.log(error);
+    throw error;
   }
 };
