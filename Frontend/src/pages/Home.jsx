@@ -41,8 +41,12 @@ const Home = () => {
     }
     try {
       const token = localStorage.getItem("token");
-      const res = await (await import("axios")).default.get(
-        `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions?input=${encodeURIComponent(input)}`,
+      const res = await (
+        await import("axios")
+      ).default.get(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/maps/get-suggestions?input=${encodeURIComponent(input)}`,
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
@@ -119,13 +123,13 @@ const Home = () => {
         gsap.to(vehiclePanelRef.current, {
           transform: "translateY(0)",
           duration: 0.5,
-          ease: "power2.out"
+          ease: "power2.out",
         });
       } else {
         gsap.to(vehiclePanelRef.current, {
           transform: "translateY(100%)",
           duration: 0.5,
-          ease: "power2.in"
+          ease: "power2.in",
         });
       }
     },
@@ -138,13 +142,13 @@ const Home = () => {
         gsap.to(rideComfirm.current, {
           transform: "translateY(0)",
           duration: 0.5,
-          ease: "power2.out"
+          ease: "power2.out",
         });
       } else {
         gsap.to(rideComfirm.current, {
           transform: "translateY(100%)",
           duration: 0.5,
-          ease: "power2.in"
+          ease: "power2.in",
         });
       }
     },
@@ -157,13 +161,13 @@ const Home = () => {
         gsap.to(vehicleFoundRef.current, {
           transform: "translateY(0)",
           duration: 0.5,
-          ease: "power2.out"
+          ease: "power2.out",
         });
       } else {
         gsap.to(vehicleFoundRef.current, {
           transform: "translateY(100%)",
           duration: 0.5,
-          ease: "power2.in"
+          ease: "power2.in",
         });
       }
     },
@@ -187,11 +191,11 @@ const Home = () => {
 
   async function findTrip() {
     if (!pickup || pickup.length < 3) {
-      alert('Please enter a valid pick-up location (at least 3 characters).');
+      alert("Please enter a valid pick-up location (at least 3 characters).");
       return;
     }
     if (!destination || destination.length < 3) {
-      alert('Please enter a valid destination (at least 3 characters).');
+      alert("Please enter a valid destination (at least 3 characters).");
       return;
     }
 
@@ -216,16 +220,20 @@ const Home = () => {
   }
 
   async function createRide() {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+      {
         pickup,
         destination,
         vehicleType: vehicleType,
-      },{
+      },
+      {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      });
-      console.log(response.data);
+      }
+    );
+    console.log(response.data);
   }
 
   return (
@@ -319,42 +327,42 @@ const Home = () => {
 
       {!panelOpen && (
         <>
-      <div
-        ref={vehiclePanelRef}
+          <div
+            ref={vehiclePanelRef}
             style={{ willChange: "transform" }}
             className="fixed w-full z-10 bottom-0 translate-y-full px-3 py-5 rounded-tl-3xl rounded-tr-3xl bg-white"
-      >
-        <VehiclePanel
+          >
+            <VehiclePanel
               isActive={vehiclePanel}
               selectVehicle={setVehicleType}
               fare={fare}
-          setConfirmRide={setConfirmRide}
-          setVehiclePanel={setVehiclePanel}
-        />
-      </div>
+              setConfirmRide={setConfirmRide}
+              setVehiclePanel={setVehiclePanel}
+            />
+          </div>
 
-      <div
-        ref={rideComfirm}
+          <div
+            ref={rideComfirm}
             style={{ willChange: "transform" }}
-        className="fixed w-full z-10 bottom-0 translate-y-full px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
-      >
-        <ConfirmRide
+            className="fixed w-full z-10 bottom-0 translate-y-full px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
+          >
+            <ConfirmRide
               createRide={createRide}
               pickup={pickup}
               destination={destination}
               fare={fare}
               vehicleType={vehicleType}
-          setConfirmRide={setConfirmRide}
-          setVehicleFound={setVehicleFound}
-        />
-      </div>
+              setConfirmRide={setConfirmRide}
+              setVehicleFound={setVehicleFound}
+            />
+          </div>
 
-      <div
-        ref={vehicleFoundRef}
+          <div
+            ref={vehicleFoundRef}
             style={{ willChange: "transform" }}
             className="fixed w-full z-10 bottom-0 translate-y-full px-3 py-4 rounded-tl-3xl rounded-tr-3xl bg-white"
-      >
-            <LookingForDriver 
+          >
+            <LookingForDriver
               createRide={createRide}
               pickup={pickup}
               destination={destination}
@@ -362,14 +370,14 @@ const Home = () => {
               vehicleType={vehicleType}
               setVehicleFound={setVehicleFound}
             />
-      </div>
+          </div>
 
-      <div
-        ref={waitingfordriverRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full  px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
-      >
-        <WaitingForDriver setWaitingForDriver={setWaitingForDriver} />
-      </div>
+          <div
+            ref={waitingfordriverRef}
+            className="fixed w-full z-10 bottom-0 translate-y-full  px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
+          >
+            <WaitingForDriver setWaitingForDriver={setWaitingForDriver} />
+          </div>
         </>
       )}
     </div>
