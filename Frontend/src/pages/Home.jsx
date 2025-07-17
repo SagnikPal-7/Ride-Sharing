@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
@@ -10,6 +10,8 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -32,6 +34,15 @@ const Home = () => {
   const waitingfordriverRef = useRef(null);
 
   // const navigate = useNavigate();
+
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext);
+
+  useEffect(() => {
+    //console.log(user);
+
+    socket.emit("join", { userType: "user", userId: user._id });
+  },[ user ]);
 
   // Fetch suggestions from backend
   const fetchSuggestions = async (input) => {
