@@ -38,7 +38,7 @@ const WaitingForDriver = (props) => {
           <h4 className="text-xl font-semibold -mt-1 -mb-1">
             {props.ride?.captain.vehicle.plate}
           </h4>
-          <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
+          <p className="text-base font-bold text-gray-700"><span className="text-black">OTP :</span> {props.ride?.otp}</p>
         </div>
       </div>
 
