@@ -42,7 +42,12 @@ const Home = () => {
     //console.log(user);
 
     socket.emit("join", { userType: "user", userId: user._id });
-  },[ user ]);
+  }, [user]);
+
+  socket.on("ride-confirmed", (ride) => {
+    setVehicleFound(false);
+    setWaitingForDriver(true);
+  });
 
   // Fetch suggestions from backend
   const fetchSuggestions = async (input) => {
@@ -190,10 +195,14 @@ const Home = () => {
       if (waitingForDriver) {
         gsap.to(waitingfordriverRef.current, {
           transform: "translateY(-5%)",
+          duration: 0.8,
+          ease: "power2.out",
         });
       } else {
         gsap.to(waitingfordriverRef.current, {
           transform: "translateY(100%)",
+          duration: 0.5,
+          ease: "power2.in",
         });
       }
     },
@@ -385,7 +394,7 @@ const Home = () => {
 
           <div
             ref={waitingfordriverRef}
-            className="fixed w-full z-10 bottom-0 translate-y-full  px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
+            className="fixed w-full z-10 bottom-0 translate-y-full  px-3 py-2 rounded-tl-3xl rounded-tr-3xl bg-white"
           >
             <WaitingForDriver setWaitingForDriver={setWaitingForDriver} />
           </div>

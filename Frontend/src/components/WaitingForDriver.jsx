@@ -4,6 +4,7 @@ import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
 
+
 const WaitingForDriver = (props) => {
   return (
     <div>
@@ -16,20 +17,20 @@ const WaitingForDriver = (props) => {
         <i className="text-3xl text-gray-400 ri-arrow-down-wide-fill"></i>
       </h5>
 
-      <div className="flex items-center justify-between mt-2">
+      <div className="flex items-center justify-between mt-4 mr-2">
         <img
-          className="h-15"
+          className="h-20"
           src={car2}
           alt=""
-          style={{
-            filter: `
-        drop-shadow(0 0 96px rgba(59,130,246,1))
-        drop-shadow(0 0 48px rgba(59,130,246,0.8))
-        drop-shadow(0 0 24px rgba(59,130,246,0.6))
-      `,
-            background: "transparent",
-            borderRadius: "1rem",
-          }}
+          // style={{
+          //   filter: `
+          //   drop-shadow(0 0 96px rgba(59,130,246,1))
+          //   drop-shadow(0 0 48px rgba(59,130,246,0.8))
+          //   drop-shadow(0 0 24px rgba(59,130,246,0.6))
+          // `,
+          //   background: "transparent",
+          //   borderRadius: "1rem",
+          // }}
         />
         <div className="text-right">
           <h2 className="text-lg font-medium">Sagnik</h2>

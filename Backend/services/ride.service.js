@@ -30,16 +30,19 @@ async function getFare(pickup, destination) {
   const fare = {
     auto: Math.round(
       basefare.auto +
-      (distanceTime.distance.value / 1000) * perKmRate.auto +
-      (distanceTime.duration.value / 60 + perMinuteRate.auto)),
+        (distanceTime.distance.value / 1000) * perKmRate.auto +
+        (distanceTime.duration.value / 60 + perMinuteRate.auto)
+    ),
     car: Math.round(
       basefare.car +
-      (distanceTime.distance.value / 1000) * perKmRate.car +
-      (distanceTime.duration.value / 60 + perMinuteRate.car)),
-    motorcycle:Math.round(
+        (distanceTime.distance.value / 1000) * perKmRate.car +
+        (distanceTime.duration.value / 60 + perMinuteRate.car)
+    ),
+    motorcycle: Math.round(
       basefare.motorcycle +
-      (distanceTime.distance.value / 1000) * perKmRate.motorcycle +
-      (distanceTime.duration.value / 60 + perMinuteRate.motorcycle)),
+        (distanceTime.distance.value / 1000) * perKmRate.motorcycle +
+        (distanceTime.duration.value / 60 + perMinuteRate.motorcycle)
+    ),
   };
 
   return fare;
@@ -77,5 +80,33 @@ module.exports.createRide = async ({
     otp: getOtp(6),
     fare: fare[vehicleType],
   });
+  return ride;
+};
+
+module.exports.confirmRide = async ({ rideId, captain }) => {
+  if (!rideId) {
+    throw new Error("Ride id is required");
+  }
+
+  await rideModel.findOneAndUpdate(
+    {
+      _id: rideId,
+    },
+    {
+      status: "accepted",
+      captain: captain._id,
+    }
+  );
+
+  const ride = await rideModel
+    .findOne({
+      _id: rideId,
+    })
+    .populate("user");
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
   return ride;
 };
