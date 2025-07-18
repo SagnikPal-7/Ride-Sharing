@@ -4,7 +4,6 @@ import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
 
-
 const WaitingForDriver = (props) => {
   return (
     <div>
@@ -33,8 +32,12 @@ const WaitingForDriver = (props) => {
           // }}
         />
         <div className="text-right">
-          <h2 className="text-lg font-medium">Sagnik</h2>
-          <h4 className="text-xl font-semibold -mt-1 -mb-1">MP04 AB 1234</h4>
+          <h2 className="text-lg font-medium">
+            {props.ride?.captain.fullname.firstname}
+          </h2>
+          <h4 className="text-xl font-semibold -mt-1 -mb-1">
+            {props.ride?.captain.vehicle.plate}
+          </h4>
           <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
         </div>
       </div>
@@ -45,9 +48,9 @@ const WaitingForDriver = (props) => {
             <i className="text-2xl ri-map-pin-user-fill ri-user-location-fill"></i>
 
             <div>
-              <h3 className="text-lg font-medium ">526/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {/* <h3 className="text-lg font-medium ">526/11-A</h3> */}
+              <p className="text-base font-semibold -mt-1 text-gray-800">
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
@@ -56,9 +59,9 @@ const WaitingForDriver = (props) => {
             <i className="text-xl text-red-600 ri-map-pin-fill"></i>
 
             <div>
-              <h3 className="text-lg font-medium ">526/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Bhopal
+              {/* <h3 className="text-lg font-medium ">526/11-A</h3> */}
+              <p className="text-base font-semibold -mt-1 text-gray-800">
+                {props.ride?.destination}
               </p>
             </div>
           </div>
@@ -67,8 +70,8 @@ const WaitingForDriver = (props) => {
             <i className="text-xl ri-currency-line"></i>
 
             <div>
-              <h3 className="text-lg font-medium ">₹193.20</h3>
-              <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
+              <h3 className="text-lg font-medium ">₹{props.ride?.fare}</h3>
+              <p className="text-sm -mt-1 text-gray-600">Cash</p>
             </div>
           </div>
         </div>

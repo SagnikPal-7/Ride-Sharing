@@ -25,6 +25,7 @@ const Home = () => {
   const [activeField, setActiveField] = useState(null); // 'pickup' or 'destination'
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
+  const [ride, setRide] = useState(null);
 
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
@@ -47,6 +48,7 @@ const Home = () => {
   socket.on("ride-confirmed", (ride) => {
     setVehicleFound(false);
     setWaitingForDriver(true);
+    setRide(ride);
   });
 
   // Fetch suggestions from backend
@@ -396,7 +398,10 @@ const Home = () => {
             ref={waitingfordriverRef}
             className="fixed w-full z-10 bottom-0 translate-y-full  px-3 py-2 rounded-tl-3xl rounded-tr-3xl bg-white"
           >
-            <WaitingForDriver setWaitingForDriver={setWaitingForDriver} />
+            <WaitingForDriver
+              ride={ride}
+              setWaitingForDriver={setWaitingForDriver}
+            />
           </div>
         </>
       )}
