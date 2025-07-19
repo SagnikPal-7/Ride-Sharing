@@ -5,10 +5,19 @@ import car2 from "../assets/Car2.webp";
 import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
+import { useEffect, useContext } from "react";
+import { SocketContext } from "../context/SocketContext";
+import { useNavigate } from "react-router-dom";
 
 const Riding = () => {
   const location = useLocation();
   const { ride } = location.state || {};
+  const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
+
+  socket.on("ride-ended", () => {
+    navigate("/home");
+  });
 
   return (
     <div className="h-screen">
