@@ -1,12 +1,15 @@
 import React from "react";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import car2 from "../assets/Car2.webp";
 import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
 
 const Riding = () => {
+  const location = useLocation();
+  const { ride } = location.state || {};
+
   return (
     <div className="h-screen">
       <div>
@@ -44,9 +47,17 @@ const Riding = () => {
             //   borderRadius: "1rem",
             // }}
           />
+
+          {/* {props.ride?.captain.fullname.firstname+" "+props.ride?.captain.fullname.lastname} */}
           <div className="text-right">
-            <h2 className="text-lg font-medium">Sagnik</h2>
-            <h4 className="text-xl font-semibold -mt-1 -mb-1">MP04 AB 1234</h4>
+            <h2 className="text-lg font-medium capitalize">
+              {ride?.captain.fullname.firstname +
+                " " +
+                ride?.captain.fullname.lastname}
+            </h2>
+            <h4 className="text-xl font-semibold -mt-1 -mb-1">
+              {ride?.captain.vehicle.plate}
+            </h4>
             <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
           </div>
         </div>
@@ -57,23 +68,30 @@ const Riding = () => {
               <i className="text-xl text-gray-800 ri-map-pin-fill"></i>
 
               <div>
-                <h3 className="text-lg font-medium ">526/11-A</h3>
-                <p className="text-sm -mt-1 text-gray-600">
-                  Kankariya Talab, Bhopal
+                {/* <h3 className="text-lg font-medium ">526/11-A</h3> */}
+                <p className="text-base -mt-1 text-gray-800 font-semibold">
+                  {ride?.destination}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-4 p-3 ">
-              <i className="text-xl ri-currency-line"></i>
+              <i className="text-2xl ri-currency-line"></i>
 
               <div>
-                <h3 className="text-lg font-medium ">₹193.20</h3>
-                <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
+                <h3 className="text-lg font-medium ">₹{ride?.fare}</h3>
+                <p className="text-sm -mt-1 text-gray-600">Cash</p>
               </div>
             </div>
           </div>
         </div>
+        {/* {ride && (
+          <div>
+            <h2>Ride ID: {ride.id}</h2>
+            <p>Pickup Location: {ride.pickup}</p>
+            <p>Destination: {ride.destination}</p>
+          </div>
+        )} */}
 
         <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg">
           Make a Payment

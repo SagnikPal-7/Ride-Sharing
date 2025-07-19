@@ -51,11 +51,10 @@ const Home = () => {
     setRide(ride);
   });
 
-  socket.on('ride-started',ride=>{
-    setWaitingForDriver(false)
-    navigate('/riding')
-
-  })
+  socket.on("ride-started", (ride) => {
+    setWaitingForDriver(false);
+    navigate("/riding", { state: { ride } });
+  });
 
   // Fetch suggestions from backend
   const fetchSuggestions = async (input) => {

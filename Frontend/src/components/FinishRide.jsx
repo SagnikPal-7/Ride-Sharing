@@ -33,15 +33,19 @@ const FinishRide = (props) => {
           />
 
           <div className="justify-between flex flex-col">
-            <h2 className="text-lg font-medium">Harsh Patel</h2>
+            <h2 className="text-lg font-medium capitalize">
+              {props.ride?.user.fullname.firstname +
+                " " +
+                props.ride?.user.fullname.lastname}
+            </h2>
             <h5 className="text-base font-semibold">2.2 KM</h5>
           </div>
         </div>
 
         <div className="w-1/3 mt-3 mb-3 right-2 mr-3">
-          <div className="justify-between flex">
+          <div className="justify-start flex">
             <i className="text-2xl ri-currency-line"></i>
-            <h3 className="text-xl font-bold">₹193.20</h3>
+            <h3 className="text-xl font-bold ml-2">₹{props.ride?.fare}</h3>
           </div>
 
           <div className="ml-10">
@@ -55,9 +59,9 @@ const FinishRide = (props) => {
           <div className="h-1/2 mb-1 border-b-2 border-gray-400">
             <i className="text-xl ri-user-location-fill"></i>
             <div>
-              <h3 className="text-lg font-medium -mt-1">526/11-A</h3>
+              {/* <h3 className="text-lg font-medium -mt-1">526/11-A</h3> */}
               <p className="text-base -mt-1 text-gray-800 mb-1 font-medium">
-                Kankariya Talab, Bhopal
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
@@ -66,9 +70,9 @@ const FinishRide = (props) => {
             <i className="text-xl text-red-600 ri-map-pin-fill "></i>
 
             <div>
-              <h3 className="text-lg font-medium -mt-1 ">526/11-A</h3>
+              {/* <h3 className="text-lg font-medium -mt-1 ">526/11-A</h3> */}
               <p className="text-base -mt-1 text-gray-800 font-medium">
-                Kankariya Talab, Bhopal
+                {props.ride?.destination}
               </p>
             </div>
           </div>
