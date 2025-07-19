@@ -7,16 +7,16 @@ import auto from "../assets/Auto.png";
 const WaitingForDriver = (props) => {
   return (
     <div>
-      <h5
+      {/* <h5
         onClick={() => {
           props.setWaitingForDriver(false);
         }}
         className="p-1 w-[93%] text-center absolute top-0"
       >
         <i className="text-3xl text-gray-400 ri-arrow-down-wide-fill"></i>
-      </h5>
+      </h5> */}
 
-      <div className="flex items-center justify-between mt-4 mr-2">
+      <div className="flex items-center justify-between mt-3 mr-2">
         <img
           className="h-20"
           src={car2}

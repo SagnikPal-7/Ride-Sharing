@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -34,7 +34,7 @@ const Home = () => {
   const vehicleFoundRef = useRef(null);
   const waitingfordriverRef = useRef(null);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserDataContext);
@@ -50,6 +50,12 @@ const Home = () => {
     setWaitingForDriver(true);
     setRide(ride);
   });
+
+  socket.on('ride-started',ride=>{
+    setWaitingForDriver(false)
+    navigate('/riding')
+
+  })
 
   // Fetch suggestions from backend
   const fetchSuggestions = async (input) => {
