@@ -61,10 +61,10 @@ const CaptainRiding = () => {
         <div className="flex">
           <div className="w-2/3">
             <i className="text-base text-black ri-map-pin-fill "></i>
-            <h4 className="text-sm font-semibold">{rideDate?.destination}</h4>
+            <h4 className="text-[12px] font-semibold">{rideDate?.destination}</h4>
           </div>
 
-          <div className="w-1/3 mr-4 flex">
+          <div className="w-1/3 mt-6 mr-4 h-15 flex">
             <button className="bg-green-700 text-white text-xs font-base p-3 px-10 rounded-xl">
               Complete Ride
             </button>

@@ -82,18 +82,18 @@ const FinishRide = (props) => {
             <i className="text-xl ri-user-location-fill"></i>
             <div>
               {/* <h3 className="text-lg font-medium -mt-1">526/11-A</h3> */}
-              <p className="text-base -mt-1 text-gray-800 mb-1 font-medium">
+              <p className="text-[13px] -mt-1 text-gray-800 mb-2 font-medium">
                 {props.ride?.pickup}
               </p>
             </div>
           </div>
 
-          <div className="mt-1 mb-1 h-1/2">
+          <div className="mt-1 mb-2 h-1/2">
             <i className="text-xl text-red-600 ri-map-pin-fill "></i>
 
             <div>
               {/* <h3 className="text-lg font-medium -mt-1 ">526/11-A</h3> */}
-              <p className="text-base -mt-1 text-gray-800 font-medium">
+              <p className="text-[13px] -mt-1 text-gray-800 font-medium">
                 {props.ride?.destination}
               </p>
             </div>

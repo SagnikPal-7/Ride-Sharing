@@ -371,7 +371,7 @@ const Home = () => {
           <div
             ref={rideComfirm}
             style={{ willChange: "transform" }}
-            className="fixed w-full z-10 bottom-0 translate-y-full px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
+            className="fixed w-full z-10 bottom-3 translate-y-full px-3 py-6 rounded-tl-3xl rounded-tr-3xl bg-white"
           >
             <ConfirmRide
               createRide={createRide}

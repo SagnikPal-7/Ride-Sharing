@@ -76,7 +76,7 @@ const ConfirmRidePopup = (props) => {
           </div>
 
           <div className="ml-10">
-            <p className="text-sm -mt-1 ml-3 text-gray-800 font-medium">Cash</p>
+            <p className="text-sm -mt-1 text-gray-800 font-medium">Cash</p>
           </div>
         </div>
       </div>

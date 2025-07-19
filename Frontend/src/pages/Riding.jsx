@@ -40,8 +40,8 @@ const Riding = () => {
         />
       </div>
 
-      <div className="h-1/2 p-4">
-        <div className="flex items-center justify-between mt-2">
+      <div className="h-1/2 p-4 rounded-xl">
+        <div className="flex items-center justify-between mt-1">
           <img
             className="h-20"
             src={car2}
@@ -72,13 +72,13 @@ const Riding = () => {
         </div>
 
         <div className="flex flex-col gap-2 justify-between items-center">
-          <div className="w-full mt-5">
+          <div className="w-full mt-3">
             <div className="flex items-center gap-4 p-3 border-b-2 border-gray-400">
               <i className="text-xl text-gray-800 ri-map-pin-fill"></i>
 
               <div>
                 {/* <h3 className="text-lg font-medium ">526/11-A</h3> */}
-                <p className="text-base -mt-1 text-gray-800 font-semibold">
+                <p className="text-[14px] -mt-1 text-gray-800 font-semibold">
                   {ride?.destination}
                 </p>
               </div>
@@ -102,7 +102,7 @@ const Riding = () => {
           </div>
         )} */}
 
-        <button className="w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg">
+        <button className="w-full mt-1 bg-green-600 text-white font-semibold p-2 rounded-lg">
           Make a Payment
         </button>
       </div>
