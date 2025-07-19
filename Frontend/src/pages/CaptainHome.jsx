@@ -15,6 +15,7 @@ import { SocketContext } from "../context/SocketContext";
 import { CaptainDataContext } from "../context/CaptainContext";
 import { useEffect } from "react";
 import axios from "axios";
+import LiveTracking from "../components/LiveTracking";
 
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
@@ -114,22 +115,29 @@ const CaptainHome = () => {
 
   return (
     <div className="h-screen">
-      <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
+      <div>
+        <img className="w-16 absolute left-5 top-15 z-50" src={uberdriver} alt="" />
+      </div>
+
+      <Link
+        to="/captain/logout"
+        className="fixed right-3 top-15 h-9 w-9 bg-white flex items-center justify-center rounded-full z-50"
+      >
+        <i className="text-xl font-medium ri-logout-box-r-line"></i>
+      </Link>
+
+      {/* <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
         <img className="w-16 absolute left-3 top-2" src={uberdriver} alt="" />
         <Link
           to="/captain/logout"
-          className="fixed top-3 right-4 h-10 w-10 bg-white flex items-center justify-center rounded-full"
+          className="fixed top-3 right-4 h-10 w-10 bg-white flex items-center justify-center rounded-full z-50"
         >
           <i className="text-lg font-medium ri-logout-box-r-line"></i>
         </Link>
-      </div>
+      </div> */}
 
       <div className="h-3/5">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+        <LiveTracking />
       </div>
 
       <div className="h-2/5 p-6">

@@ -12,6 +12,8 @@ import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import { SocketContext } from "../context/SocketContext";
 import { UserDataContext } from "../context/UserContext";
+import LiveTracking from "../components/LiveTracking";
+
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -266,22 +268,18 @@ const Home = () => {
   return (
     <div className="h-screen relative overflow-hidden">
       <div>
-        <img className="w-16 absolute left-5 top-5" src={logo} alt="" />
+        <img className="w-16 absolute left-5 top-15 z-50" src={logo} alt="" />
       </div>
 
       <Link
         to="/profile"
-        className="fixed right-3 top-3 h-9 w-9 bg-white flex items-center justify-center rounded-full z-50"
+        className="fixed right-3 top-15 h-9 w-9 bg-white flex items-center justify-center rounded-full z-50"
       >
         <i className="text-xl font-medium ri-user-3-fill"></i>
       </Link>
 
       <div className="h-screen w-screen">
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+        <LiveTracking/>
       </div>
 
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
