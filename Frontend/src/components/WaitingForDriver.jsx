@@ -1,10 +1,16 @@
 import React from "react";
 import car2 from "../assets/Car2.webp";
-import car1 from "../assets/Car1.webp";
+//import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
 
 const WaitingForDriver = (props) => {
+  let vehicleImg = car2;
+  if (props.vehicleType === "auto") vehicleImg = auto;
+  else if (props.vehicleType === "moto" || props.vehicleType === "motorcycle")
+    vehicleImg = bike;
+  else if (props.vehicleType === "car") vehicleImg = car2;
+
   return (
     <div>
       {/* <h5
@@ -18,8 +24,8 @@ const WaitingForDriver = (props) => {
 
       <div className="flex items-center justify-between mt-3 mr-2">
         <img
-          className="h-20"
-          src={car2}
+          className={props.vehicleType === "car" ? "h-25" : "h-30"}
+          src={vehicleImg}
           alt=""
           // style={{
           //   filter: `
@@ -38,7 +44,9 @@ const WaitingForDriver = (props) => {
           <h4 className="text-xl font-semibold -mt-1 -mb-1">
             {props.ride?.captain.vehicle.plate}
           </h4>
-          <p className="text-base font-bold text-gray-700"><span className="text-black">OTP :</span> {props.ride?.otp}</p>
+          <p className="text-base font-bold text-gray-700">
+            <span className="text-black">OTP :</span> {props.ride?.otp}
+          </p>
         </div>
       </div>
 

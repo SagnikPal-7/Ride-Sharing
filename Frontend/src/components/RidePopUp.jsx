@@ -1,11 +1,12 @@
 import React from "react";
-import profile from "../assets/profile.png";
+
 import userprofile from "../assets/userprofile.png";
 import { Link } from "react-router-dom";
-import car2 from "../assets/Car2.webp";
-import car1 from "../assets/Car1.webp";
-import bike from "../assets/bike.webp";
-import auto from "../assets/Auto.png";
+// import profile from "../assets/profile.png";
+// import car2 from "../assets/Car2.webp";
+// import car1 from "../assets/Car1.webp";
+// import bike from "../assets/bike.webp";
+// import auto from "../assets/Auto.png";
 
 const RidePopUp = (props) => {
   return (

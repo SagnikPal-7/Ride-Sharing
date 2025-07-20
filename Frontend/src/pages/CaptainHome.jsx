@@ -1,12 +1,12 @@
 import uberdriver from "../assets/uberdriver.png";
-import profile from "../assets/profile.png";
+// import profile from "../assets/profile.png";
 import { Link } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import car2 from "../assets/Car2.webp";
-import car1 from "../assets/Car1.webp";
-import bike from "../assets/bike.webp";
-import auto from "../assets/Auto.png";
+// import car2 from "../assets/Car2.webp";
+// import car1 from "../assets/Car1.webp";
+// import bike from "../assets/bike.webp";
+// import auto from "../assets/Auto.png";
 import CaptainDetails from "../components/CaptainDetails";
 import RidePopUp from "../components/RidePopUp";
 import { useContext, useRef, useState } from "react";
@@ -116,7 +116,11 @@ const CaptainHome = () => {
   return (
     <div className="h-screen">
       <div>
-        <img className="w-16 absolute left-5 top-15 z-50" src={uberdriver} alt="" />
+        <img
+          className="w-16 absolute left-5 top-15 z-50"
+          src={uberdriver}
+          alt=""
+        />
       </div>
 
       <Link

@@ -16,6 +16,12 @@ const Riding = () => {
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
 
+  let vehicleImg = car2;
+  if (ride.vehicleType === "auto") vehicleImg = auto;
+  else if (ride.vehicleType === "moto" || ride.vehicleType === "motorcycle")
+    vehicleImg = bike;
+  else if (ride.vehicleType === "car") vehicleImg = car2;
+
   socket.on("ride-ended", () => {
     navigate("/home");
   });
@@ -34,14 +40,14 @@ const Riding = () => {
       </Link>
 
       <div className="h-1/2">
-        <LiveTracking/>
+        <LiveTracking />
       </div>
 
       <div className="h-1/2 p-4 rounded-xl">
         <div className="flex items-center justify-between mt-1">
           <img
-            className="h-20"
-            src={car2}
+            className={ride.vehicleType === "car" ? "h-20" : "h-30"}
+            src={vehicleImg}
             alt=""
             // style={{
             //   filter: `

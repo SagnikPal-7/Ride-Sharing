@@ -161,7 +161,7 @@ const CaptainSignup = () => {
             </select>
           </div>
 
-          <button className="bg-[#111] text-white font-semibold mb-4 rounded-lg px-4 py-2 w-full text-base placeholder:text-base">
+          <button className="bg-[#111] text-white font-semibold mb-2 rounded-lg px-4 py-2 w-full text-base placeholder:text-base">
             Sign Up as Captain
           </button>
         </form>

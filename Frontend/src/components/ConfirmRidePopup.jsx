@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import profile from "../assets/profile.png";
 import userprofile from "../assets/userprofile.png";
 import { Link, useNavigate } from "react-router-dom";
-import car2 from "../assets/Car2.webp";
-import car1 from "../assets/Car1.webp";
-import bike from "../assets/bike.webp";
-import auto from "../assets/Auto.png";
 import axios from "axios";
+// import profile from "../assets/profile.png";
+// import car2 from "../assets/Car2.webp";
+// import car1 from "../assets/Car1.webp";
+// import bike from "../assets/bike.webp";
+// import auto from "../assets/Auto.png";
 
 const ConfirmRidePopup = (props) => {
   const [otp, setOtp] = useState("");
