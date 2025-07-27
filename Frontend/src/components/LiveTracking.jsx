@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api'
+import React, { useState, useEffect } from "react";
+import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: '100%',
-  height: '400px'
+  width: "100%",
+  height: "400px",
 };
 
 const LiveTracking = () => {
@@ -38,12 +38,12 @@ const LiveTracking = () => {
     // setMap(null); // Removed as map state is not used
   };
 
-    // WARNING: Hardcoding API keys is not recommended for production environments.
-    // It's better to use environment variables as previously discussed.
+  // WARNING: Hardcoding API keys is not recommended for production environments.
+  // It's better to use environment variables as previously discussed.
 
-    //  const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API;
+  //const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API;
 
-    const googleMapsApiKey = "AIzaSyCDHpbpRGnOkGmMkt_akjIQSK_GqzUElIM";
+  const googleMapsApiKey = "AIzaSyCDHpbpRGnOkGmMkt_akjIQSK_GqzUElIM";
 
   if (!googleMapsApiKey) {
     return <div>Error: Google Maps API key is not set.</div>;
@@ -67,7 +67,7 @@ const LiveTracking = () => {
         <div>Loading map...</div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LiveTracking
+export default LiveTracking;
