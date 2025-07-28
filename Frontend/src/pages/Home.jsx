@@ -28,6 +28,8 @@ const Home = () => {
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
   const [ride, setRide] = useState(null);
+  const [pickupCoords, setPickupCoords] = useState(null); // New state for pickup coordinates
+  const [destinationCoords, setDestinationCoords] = useState(null); // New state for destination coordinates
 
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
@@ -107,8 +109,10 @@ const Home = () => {
   const handleSuggestionClick = (suggestion) => {
     if (activeField === "pickup") {
       setPickup(suggestion.description);
+      setPickupCoords(suggestion.location); // Assuming suggestion.location contains { lat, lng }
     } else if (activeField === "destination") {
       setDestination(suggestion.description);
+      setDestinationCoords(suggestion.location); // Assuming suggestion.location contains { lat, lng }
     }
     setSuggestions([]);
   };
@@ -279,10 +283,13 @@ const Home = () => {
       </Link>
 
       <div className="h-screen w-screen">
-        <LiveTracking/>
+        <LiveTracking
+          pickupCoords={pickupCoords}
+          destinationCoords={destinationCoords}
+        />
       </div>
 
-      <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
+      <div className=" flex flex-col justify-end w-full absolute bottom-0">
         <div className="h-[37%] p-6 bg-white rounded-tl-3xl rounded-tr-3xl relative">
           <h5
             ref={panelCloseRef}

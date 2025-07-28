@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
@@ -6,9 +6,11 @@ const containerStyle = {
   height: "400px",
 };
 
-const LiveTracking = () => {
+const LiveTracking = ({ pickupCoords, destinationCoords }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
+  const mapRef = useRef(null); // Ref to hold the map instance
 
+  // Effect to get and update current location marker ONLY
   useEffect(() => {
     if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
@@ -28,22 +30,39 @@ const LiveTracking = () => {
         navigator.geolocation.clearWatch(watchId);
       };
     }
-  }, []);
+  }, []); // This effect runs only once on mount
 
-  const onLoad = () => {
-    // setMap(mapInstance); // Removed as map state is not used
+  // Effect to pan map to new pickup or destination location (one-time pan)
+  useEffect(() => {
+    if (mapRef.current) {
+      if (pickupCoords) {
+        mapRef.current.panTo(pickupCoords);
+        mapRef.current.setZoom(10);
+      } else if (destinationCoords) {
+        mapRef.current.panTo(destinationCoords);
+        mapRef.current.setZoom(10);
+      }
+    }
+  }, [pickupCoords, destinationCoords]); // Only re-run when pickupCoords or destinationCoords change
+
+  const onLoad = (mapInstance) => {
+    mapRef.current = mapInstance; // Store map instance in ref
+
+    // Set initial center and zoom when the map loads for the very first time
+    // This should only happen once.
+    const defaultCenter = { lat: 20.5937, lng: 78.9629 }; // Center of India
+    const initialCenter = pickupCoords || destinationCoords || currentLocation || defaultCenter; // Use currentLocation if available initially
+    const initialZoom = (pickupCoords || destinationCoords) ? 10 : 5;
+
+    mapInstance.setCenter(initialCenter);
+    mapInstance.setZoom(initialZoom);
   };
 
   const onUnmount = () => {
-    // setMap(null); // Removed as map state is not used
+    mapRef.current = null;
   };
 
-  // WARNING: Hardcoding API keys is not recommended for production environments.
-  // It's better to use environment variables as previously discussed.
-
-  //const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API;
-
-  const googleMapsApiKey = "AIzaSyCDHpbpRGnOkGmMkt_akjIQSK_GqzUElIM";
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   if (!googleMapsApiKey) {
     return <div>Error: Google Maps API key is not set.</div>;
@@ -51,21 +70,21 @@ const LiveTracking = () => {
 
   return (
     <div className="live-tracking-container">
-      {currentLocation ? (
-        <LoadScript googleMapsApiKey={googleMapsApiKey}>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={currentLocation}
-            zoom={15}
-            onLoad={onLoad}
-            onUnmount={onUnmount}
-          >
-            <Marker position={currentLocation} />
-          </GoogleMap>
-        </LoadScript>
-      ) : (
-        <div>Loading map...</div>
-      )}
+      <LoadScript googleMapsApiKey={googleMapsApiKey} libraries={["places"]}>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
+          options={{
+            draggable: true, // Explicitly enable dragging
+            disableDefaultUI: false, // Keep default UI like zoom controls
+          }}
+        >
+          {currentLocation && <Marker position={currentLocation} />}
+          {pickupCoords && <Marker position={pickupCoords} icon={{ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" }} />}
+          {destinationCoords && <Marker position={destinationCoords} icon={{ url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png" }} />}
+        </GoogleMap>
+      </LoadScript>
     </div>
   );
 };

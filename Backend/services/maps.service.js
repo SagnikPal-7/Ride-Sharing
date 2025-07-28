@@ -65,7 +65,25 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
   try {
     const response = await axios.get(url);
     if (response.data.status === "OK") {
-      return response.data.predictions;
+      const predictions = response.data.predictions;
+
+      const suggestionsWithCoords = await Promise.all(
+        predictions.map(async (prediction) => {
+          const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&key=${apiKey}`;
+          const detailsResponse = await axios.get(detailsUrl);
+          if (detailsResponse.data.status === "OK") {
+            const location = detailsResponse.data.result.geometry.location;
+            return { ...prediction, location };
+          } else {
+            console.warn(
+              `Could not fetch details for place_id ${prediction.place_id}`
+            );
+            return prediction; // Return prediction without location if details fetch fails
+          }
+        })
+      );
+
+      return suggestionsWithCoords;
     } else {
       throw new Error("Unable to feth suggestions");
     }
