@@ -880,3 +880,91 @@ GET /rides/get-fare?pickup=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destinat
 - All time and distance calculations use Google Maps API under the hood.
 
 ---
+
+# Ride-Sharing Backend
+
+## User-to-Captain Conference Call Feature
+
+### Overview
+This feature allows users to initiate conference calls to their ride captains directly from the "Waiting for Driver" page. Both the user and captain are connected to the same conference call with appropriate voice prompts.
+
+### How Conference Calls Work
+
+1. **User Initiates Call**: User clicks "Call Captain (Conference)" button
+2. **System Calls Both Parties**: Backend calls both the captain's and user's phone numbers
+3. **Voice Prompts**: 
+   - Captain hears: "Hello Captain! You have a passenger calling you. Please wait while we connect you to the conference."
+   - User hears: "Hello! You are being connected to your ride captain. Please wait while we join the conference."
+4. **Conference Connection**: Both parties join the same conference room
+5. **Call Recording**: The entire conversation is recorded for safety
+
+### API Endpoints
+
+#### User Call Endpoints
+- `POST /users/initiate-call` - Initiate a conference call from user to captain
+- `POST /users/voice` - Twilio webhook for user voice response
+- `POST /users/user-voice` - Twilio webhook for user voice response in conference
+- `POST /users/captain-voice` - Twilio webhook for captain voice response
+- `POST /users/call-status-callback` - Twilio webhook for call status updates
+- `POST /users/recording-callback` - Twilio webhook for recording status
+- `POST /users/conference-status` - Twilio webhook for conference status
+
+### Request Format
+```json
+{
+  "rideId": "ride_id_here",
+  "captainPhoneNumber": "captain_phone_number"
+}
+```
+
+### Response Format
+```json
+{
+  "success": true,
+  "message": "Conference call initiated successfully",
+  "callId": "call_id_here",
+  "captainCallSid": "twilio_captain_call_sid",
+  "userCallSid": "twilio_user_call_sid",
+  "phoneNumber": "+91XXXXXXXXXX",
+  "conferenceName": "conference_name",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "mode": "real" // or "test"
+}
+```
+
+### Voice Prompts
+
+#### For Captain:
+- "Hello Captain! You have a passenger calling you. Please wait while we connect you to the conference."
+- "Connecting you to your passenger now."
+
+#### For User:
+- "Hello! You are being connected to your ride captain. Please wait while we join the conference."
+- "You are now joining the conference with your captain."
+
+### Frontend Integration
+The conference call button is integrated into the `WaitingForDriver` component with:
+- Single "Call Captain (Conference)" button
+- Loading state during call initiation
+- Success/error status messages
+- Disabled state while calling
+- Automatic status clearing after 5 seconds
+- Clear indication that it's a conference call
+- Message indicating both user and captain will receive calls
+
+### Environment Variables Required
+- `TWILIO_ACCOUNT_SID` - Twilio Account SID
+- `TWILIO_AUTH_TOKEN` - Twilio Auth Token  
+- `TWILIO_PHONE_NUMBER` - Twilio phone number
+- `BASE_URL` - Your ngrok URL or production URL
+
+### Test Mode
+If Twilio credentials are not configured, the system runs in test mode and simulates conference call initiation without making actual calls.
+
+### Conference Features
+- **Max Participants**: 2 (User + Captain)
+- **Recording**: Enabled for safety
+- **Beep Sound**: Disabled for better experience
+- **Participant Labels**: "User" and "Captain" for identification
+- **Auto End**: Conference ends when either party leaves
+- **Dual Calling**: Both user and captain receive phone calls to join the same conference

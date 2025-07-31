@@ -68,4 +68,23 @@ router.put(
   userController.updateProfileImage
 );
 
+// Add routes for user call functionality
+router.post(
+  "/initiate-call",
+  authMiddleware.authUser,
+  [
+    body("rideId").notEmpty().withMessage("Ride ID is required"),
+    body("captainPhoneNumber").notEmpty().withMessage("Captain phone number is required"),
+  ],
+  userController.initiateCallToCaptain
+);
+
+// Twilio webhook routes for user calls
+router.post("/voice", userController.userVoiceResponse);
+router.post("/user-voice", userController.userVoiceResponseForConference);
+router.post("/captain-voice", userController.captainVoiceResponse);
+router.post("/call-status-callback", userController.userCallStatusCallback);
+router.post("/recording-callback", userController.userRecordingCallback);
+router.post("/conference-status", userController.userConferenceStatus);
+
 module.exports = router;

@@ -1,15 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import car2 from "../assets/Car2.webp";
 //import car1 from "../assets/Car1.webp";
 import bike from "../assets/bike.webp";
 import auto from "../assets/Auto.png";
 
 const WaitingForDriver = (props) => {
+  const [isCalling, setIsCalling] = useState(false);
+  const [callStatus, setCallStatus] = useState("");
+
   let vehicleImg = car2;
   if (props.vehicleType === "auto") vehicleImg = auto;
   else if (props.vehicleType === "moto" || props.vehicleType === "motorcycle")
     vehicleImg = bike;
   else if (props.vehicleType === "car") vehicleImg = car2;
+
+  const handleCallCaptain = async () => {
+    if (!props.ride?.captain?.mobile) {
+      alert("Captain phone number not available");
+      return;
+    }
+
+    // Check if user has a phone number
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user.mobile) {
+      alert("Please update your profile with a phone number before making calls.");
+      return;
+    }
+
+    setIsCalling(true);
+    setCallStatus("Initiating conference call...");
+
+    try {
+      const response = await fetch(`/users/initiate-call`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          rideId: props.ride._id,
+          captainPhoneNumber: props.ride.captain.mobile,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.mode === "test") {
+          setCallStatus("Test mode: Conference call simulated successfully!");
+        } else {
+          setCallStatus("Conference call initiated! You and your captain will receive calls to join the conference...");
+        }
+        setTimeout(() => {
+          setCallStatus("");
+          setIsCalling(false);
+        }, 5000); // Longer timeout for conference calls
+      } else {
+        setCallStatus(`Error: ${data.error || "Failed to initiate conference call"}`);
+        setTimeout(() => {
+          setCallStatus("");
+          setIsCalling(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Error calling captain:", error);
+      setCallStatus("Network error. Please try again.");
+      setTimeout(() => {
+        setCallStatus("");
+        setIsCalling(false);
+      }, 3000);
+    }
+  };
 
   return (
     <div>
@@ -82,6 +143,41 @@ const WaitingForDriver = (props) => {
               <p className="text-sm -mt-1 text-gray-600">Cash</p>
             </div>
           </div>
+        </div>
+
+        {/* Call Captain Button */}
+        <div className="w-full mt-4 px-3">
+          <button
+            onClick={handleCallCaptain}
+            disabled={isCalling}
+            className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
+              isCalling
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 active:bg-green-800"
+            }`}
+          >
+            {isCalling ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                Connecting to Captain...
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                <i className="ri-phone-fill text-lg"></i>
+                Call Captain
+              </div>
+            )}
+          </button>
+          
+          {callStatus && (
+            <div className={`mt-2 text-center text-sm font-medium ${
+              callStatus.includes("Error") || callStatus.includes("error")
+                ? "text-red-600"
+                : "text-green-600"
+            }`}>
+              {callStatus}
+            </div>
+          )}
         </div>
       </div>
     </div>
