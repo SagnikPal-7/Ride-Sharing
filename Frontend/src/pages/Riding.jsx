@@ -27,87 +27,74 @@ const Riding = () => {
   });
 
   return (
-    <div className="h-screen">
-      <div>
-        <img className="w-16 absolute left-5 top-5" src={logo} alt="" />
-      </div>
-
-      <Link
-        to="/home"
-        className="fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full"
-      >
-        <i className="text-lg font-medium ri-home-5-line"></i>
-      </Link>
-
-      <div className="h-1/2">
+    <div className="h-screen bg-gray-50 overflow-hidden">
+      {/* Map Section */}
+      <div className="h-3/5 relative">
         <LiveTracking />
       </div>
 
-      <div className="h-1/2 p-4 rounded-xl">
-        <div className="flex items-center justify-between mt-1">
-          <img
-            className={ride.vehicleType === "car" ? "h-20" : "h-30"}
-            src={vehicleImg}
-            alt=""
-            // style={{
-            //   filter: `
-            //     drop-shadow(0 0 96px rgba(59,130,246,1))
-            //     drop-shadow(0 0 48px rgba(59,130,246,0.8))
-            //     drop-shadow(0 0 24px rgba(59,130,246,0.6))
-            //   `,
-            //   background: "transparent",
-            //   borderRadius: "1rem",
-            // }}
-          />
-
-          {/* {props.ride?.captain.fullname.firstname+" "+props.ride?.captain.fullname.lastname} */}
-          <div className="text-right">
-            <h2 className="text-lg font-medium capitalize">
-              {ride?.captain.fullname.firstname +
-                " " +
-                ride?.captain.fullname.lastname}
-            </h2>
-            <h4 className="text-xl font-semibold -mt-1 -mb-1">
-              {ride?.captain.vehicle.plate}
-            </h4>
-            <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 justify-between items-center">
-          <div className="w-full mt-3">
-            <div className="flex items-center gap-4 p-3 border-b-2 border-gray-400">
-              <i className="text-xl text-gray-800 ri-map-pin-fill"></i>
-
+      {/* Ride Details Section */}
+      <div className="h-2/5 bg-white rounded-t-3xl shadow-lg -mt-6 relative z-20 overflow-hidden">
+        <div className="p-4 h-full flex flex-col">
+          {/* Captain and Vehicle Info */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <img
+                  className={`${ride.vehicleType === "car" ? "h-12 w-12" : "h-14 w-14"} object-contain`}
+                  src={vehicleImg}
+                  alt="Vehicle"
+                />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+              </div>
               <div>
-                {/* <h3 className="text-lg font-medium ">526/11-A</h3> */}
-                <p className="text-[14px] -mt-1 text-gray-800 font-semibold">
-                  {ride?.destination}
-                </p>
+                <h2 className="text-base font-semibold text-gray-900 capitalize">
+                  {ride?.captain.fullname.firstname + " " + ride?.captain.fullname.lastname}
+                </h2>
+                <p className="text-xs text-gray-600">{ride?.captain.vehicle.plate}</p>
+                <p className="text-xs text-gray-500">Maruti Suzuki Alto</p>
               </div>
             </div>
-
-            <div className="flex items-center gap-4 p-3 ">
-              <i className="text-2xl ri-currency-line"></i>
-
-              <div>
-                <h3 className="text-lg font-medium ">₹{ride?.fare}</h3>
-                <p className="text-sm -mt-1 text-gray-600">Cash</p>
+            
+            <div className="text-right">
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <i className="ri-phone-fill text-green-600 text-base"></i>
               </div>
             </div>
           </div>
-        </div>
-        {/* {ride && (
-          <div>
-            <h2>Ride ID: {ride.id}</h2>
-            <p>Pickup Location: {ride.pickup}</p>
-            <p>Destination: {ride.destination}</p>
-          </div>
-        )} */}
 
-        <button className="w-full mt-1 bg-green-600 text-white font-semibold p-2 rounded-lg">
-          Make a Payment
-        </button>
+          {/* Trip Details */}
+          <div className="space-y-2 mb-3 flex-1">
+            <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                <i className="ri-map-pin-fill text-blue-600 text-xs"></i>
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 uppercase tracking-wide">Destination</p>
+                <p className="text-xs font-medium text-gray-900">{ride?.destination}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                <i className="ri-currency-line text-green-600 text-xs"></i>
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 uppercase tracking-wide">Fare</p>
+                <p className="text-sm font-semibold text-gray-900">₹{ride?.fare}</p>
+              </div>
+              <div className="text-right">
+                <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Cash</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 text-sm">
+            <i className="ri-bank-card-line"></i>
+            Make Payment
+          </button>
+        </div>
       </div>
     </div>
   );

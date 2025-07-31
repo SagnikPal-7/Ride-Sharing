@@ -23,6 +23,13 @@ const captainSchema = new mongoose.Schema({
     match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
   },
 
+  mobile: {
+    type: String,
+    required: true,
+    unique: true,
+    minlength: [10, "Phone number must be at least 10 digits long"],
+  },
+
   password: {
     type: String,
     required: true,
@@ -68,6 +75,29 @@ const captainSchema = new mongoose.Schema({
     },
     lng: {
       type: Number,
+    },
+  },
+
+  // Statistics fields
+  statistics: {
+    hoursOnline: {
+      type: Number,
+      default: 0,
+    },
+    distanceTravelled: {
+      type: Number,
+      default: 0, // in kilometers
+    },
+    bookingsDone: {
+      type: Number,
+      default: 0,
+    },
+    totalEarned: {
+      type: Number,
+      default: 0, // in rupees
+    },
+    lastOnlineTime: {
+      type: Date,
     },
   },
 });

@@ -25,7 +25,24 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-
+  // Add this field for mobile number
+  mobile: {
+    type: String,
+    default: "",
+    validate: {
+      validator: function(v) {
+        // Only validate if a value is provided
+        if (!v || v === "") return true;
+        return v.length >= 10;
+      },
+      message: "Phone number must be at least 10 digits long"
+    }
+  },
+  // Add profile image field
+  profileImage: {
+    type: String,
+    default: "",
+  },
   //for life tracking
   socketId: {
     type: String,

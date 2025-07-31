@@ -11,6 +11,7 @@ const CaptainSignup = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [mobile, setMobile] = useState("");
 
   const [vehicleColor, setVehicleColor] = useState("");
   const [vehiclePlate, setVehiclePlate] = useState("");
@@ -29,6 +30,7 @@ const CaptainSignup = () => {
       },
       email: email,
       password: password,
+      mobile: mobile,
       vehicle: {
         color: vehicleColor,
         plate: vehiclePlate,
@@ -38,7 +40,7 @@ const CaptainSignup = () => {
     };
 
     const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/captains/register`,
+      `/captains/register`,
       captainData
     );
 
@@ -53,6 +55,7 @@ const CaptainSignup = () => {
     setFirstName("");
     setLastName("");
     setPassword("");
+    setMobile("");
     setVehicleColor("");
     setVehiclePlate("");
     setVehicleType("");
@@ -113,6 +116,17 @@ const CaptainSignup = () => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+            }}
+          />
+          <h3 className="text-lg font-medium mb-2">Enter Phone Number</h3>
+          <input
+            className="bg-[#eeeeee] mb-3 rounded px-4 py-2 border w-full text-lg placeholder:text-base"
+            required
+            type="tel"
+            placeholder="Phone Number (e.g., 9876543210)"
+            value={mobile}
+            onChange={(e) => {
+              setMobile(e.target.value);
             }}
           />
 

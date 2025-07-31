@@ -15,7 +15,7 @@ const FinishRide = (props) => {
 
   async function endRide() {
     const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/rides/end-ride`,
+      `/rides/end-ride`,
       {
         rideId: props.ride._id,
       },
@@ -51,9 +51,12 @@ const FinishRide = (props) => {
       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mt-3">
         <div className="flex items-center gap-3">
           <img
-            className="h-10 w-10 rounded-full object-cover"
-            src={userprofile}
-            alt=""
+            className="h-10 w-10 rounded-full object-cover border-2 border-blue-200"
+            src={props.ride?.user?.profileImage || userprofile}
+            alt="User Profile"
+            onError={(e) => {
+              e.target.src = userprofile;
+            }}
           />
 
           <div className="justify-between flex flex-col">
@@ -62,7 +65,6 @@ const FinishRide = (props) => {
                 " " +
                 props.ride?.user.fullname.lastname}
             </h2>
-            <h5 className="text-base font-semibold">2.2 KM</h5>
           </div>
         </div>
 

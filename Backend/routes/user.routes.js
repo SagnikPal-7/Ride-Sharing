@@ -1,8 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
+const multer = require("multer");
 const userController = require("../controllers/user.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
+
+// Configure multer for memory storage (for Cloudinary)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    // Check file type
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed!"), false);
+    }
+  },
+});
 
 router.post(
   "/register",
@@ -30,5 +47,25 @@ router.post(
 router.get("/profile", authMiddleware.authUser, userController.getUserProfile);
 
 router.get("/logout", authMiddleware.authUser, userController.logoutUser);
+
+// Add route to update phone number
+router.put(
+  "/update-phone",
+  authMiddleware.authUser,
+  [
+    body("phone")
+      .isMobilePhone()
+      .withMessage("Please enter a valid phone number"),
+  ],
+  userController.updatePhoneNumber
+);
+
+// Add route to upload profile image to Cloudinary
+router.put(
+  "/update-profile-image",
+  authMiddleware.authUser,
+  upload.single("profileImage"),
+  userController.updateProfileImage
+);
 
 module.exports = router;

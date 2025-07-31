@@ -9,12 +9,11 @@ const UserLogout = () => {
   useEffect(() => {
     localStorage.removeItem("token"); // Remove token immediately
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/users/logout`, {
+      .get(`/users/logout`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      // .catch(() => {})
       .finally(() => {
         navigate("/login");
       });
@@ -28,7 +27,7 @@ const UserLogout = () => {
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
-        background: "l#fff",
+        background: "#fff",
       }}
     >
       <div

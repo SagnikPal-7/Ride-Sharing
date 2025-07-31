@@ -21,7 +21,7 @@ const UserLogin = () => {
     };
 
     const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/users/login`,
+      "/users/login",
       userData
     );
 

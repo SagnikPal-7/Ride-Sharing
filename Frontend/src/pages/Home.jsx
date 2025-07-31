@@ -71,9 +71,7 @@ const Home = () => {
       const res = await (
         await import("axios")
       ).default.get(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/maps/get-suggestions?input=${encodeURIComponent(input)}`,
+        `/maps/get-suggestions?input=${encodeURIComponent(input)}`,
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
@@ -83,7 +81,8 @@ const Home = () => {
         data = [];
       }
       setSuggestions(data);
-    } catch {
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
       setSuggestions([]);
     }
   };
@@ -353,6 +352,8 @@ const Home = () => {
             setVehiclePanel={setVehiclePanel}
             suggestions={suggestions}
             onSuggestionClick={handleSuggestionClick}
+            pickup={pickup}
+            destination={destination}
           />
         </div>
       </div>
@@ -410,6 +411,7 @@ const Home = () => {
           >
             <WaitingForDriver
               ride={ride}
+              vehicleType={vehicleType}
               setWaitingForDriver={setWaitingForDriver}
             />
           </div>

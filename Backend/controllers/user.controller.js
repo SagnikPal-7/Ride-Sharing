@@ -2,6 +2,21 @@ const userModel = require("../models/user.model");
 const userService = require("../services/user.service");
 const { validationResult } = require("express-validator");
 const blackListTokenModel = require("../models/blacklistToken.model");
+const cloudinary = require("cloudinary").v2;
+
+// Configure Cloudinary
+// Parse the CLOUDINARY_URL: cloudinary://874352292645437:nBCcPIH63jxo_av0UBSaIz2mJa0@djtgsywb6
+const cloudinaryUrl = process.env.CLOUDINARY_URL;
+if (cloudinaryUrl) {
+  const urlParts = cloudinaryUrl.replace('cloudinary://', '').split('@');
+  const credentials = urlParts[0].split(':');
+  
+  cloudinary.config({
+    cloud_name: urlParts[1],
+    api_key: credentials[0],
+    api_secret: credentials[1],
+  });
+}
 
 module.exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -76,4 +91,76 @@ module.exports.logoutUser = async (req, res, next) => {
   await blackListTokenModel.create({ token });
 
   res.status(200).json({ message: "Logged Out" });
+};
+
+module.exports.updatePhoneNumber = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { phone } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      { mobile: phone },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ 
+      message: "Phone number updated successfully", 
+      user: updatedUser 
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports.updateProfileImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file provided" });
+    }
+
+    const userId = req.user._id;
+
+    // Convert buffer to base64 string for Cloudinary
+    const b64 = Buffer.from(req.file.buffer).toString('base64');
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: 'profile-images',
+      transformation: [
+        { width: 400, height: 400, crop: 'fill' },
+        { quality: 'auto' }
+      ]
+    });
+
+    // Update user with Cloudinary URL
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      { profileImage: result.secure_url },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ 
+      message: "Profile image updated successfully", 
+      user: updatedUser,
+      imageUrl: result.secure_url
+    });
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

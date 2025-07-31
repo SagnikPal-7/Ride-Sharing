@@ -1,4 +1,5 @@
 const rideModel = require("../models/ride.model");
+const captainModel = require("../models/captain.model");
 const { sendMessageToSocketId } = require("../socket");
 const mapService = require("./maps.service");
 const crypto = require("crypto");
@@ -176,14 +177,47 @@ module.exports.endRide = async ({ rideId, captain }) => {
     throw new Error("Ride not ongoing");
   }
 
+  // Get distance and duration for the ride
+  const distanceTime = await mapService.getDistanceTime(ride.pickup, ride.destination);
+  const distanceInKm = distanceTime.distance.value / 1000;
+  const durationInHours = distanceTime.duration.value / 3600; // Convert seconds to hours
+
+  // Update ride with distance and duration
   await rideModel.findOneAndUpdate(
     {
       _id: rideId,
     },
     {
       status: "completed",
+      distance: distanceInKm,
+      duration: durationInHours,
     }
   );
 
-  return ride;
+  // Update captain statistics
+  await captainModel.findByIdAndUpdate(
+    captain._id,
+    {
+      $inc: {
+        "statistics.bookingsDone": 1,
+        "statistics.distanceTravelled": distanceInKm,
+        "statistics.hoursOnline": durationInHours,
+        "statistics.totalEarned": ride.fare,
+      },
+      $set: {
+        "statistics.lastOnlineTime": new Date(),
+      },
+    }
+  );
+
+  // Get updated ride with populated data
+  const updatedRide = await rideModel
+    .findOne({
+      _id: rideId,
+    })
+    .populate("user")
+    .populate("captain")
+    .select("+otp");
+
+  return updatedRide;
 };

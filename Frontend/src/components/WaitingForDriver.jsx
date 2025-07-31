@@ -24,7 +24,7 @@ const WaitingForDriver = (props) => {
 
       <div className="flex items-center justify-between mt-3 mr-2">
         <img
-          className={props.vehicleType === "car" ? "h-25" : "h-30"}
+          className={props.vehicleType === "car" ? "h-23" : "h-25"}
           src={vehicleImg}
           alt=""
           // style={{
