@@ -56,11 +56,11 @@ const Riding = () => {
               </div>
             </div>
             
-            <div className="text-right">
+            {/* <div className="text-right">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                 <i className="ri-phone-fill text-green-600 text-base"></i>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Trip Details */}
