@@ -178,19 +178,23 @@ const initiateCallToUser = async (phoneNumber, rideId, captainId, conferenceName
       };
     }
 
-    // Real Twilio integration
+        // Real Twilio integration
     try {
       const twilio = require('twilio');
       const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+      
+      // Generate a unique conference name for this call
+      const generatedConferenceName = `ride_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`🎯 Generated conference name: ${generatedConferenceName}`);
       
       console.log(`Initiating real call from ${process.env.TWILIO_PHONE_NUMBER} to ${phoneNumber}`);
       console.log(`Using BASE_URL: ${process.env.BASE_URL}`);
       console.log(`Voice URL: ${process.env.BASE_URL}/captains/voice`);
       
-             const call = await client.calls.create({
-         url: `${process.env.BASE_URL}/captains/voice`,
-         to: `+${phoneNumber}`,
-         from: process.env.TWILIO_PHONE_NUMBER,
+      const call = await client.calls.create({
+        url: `${process.env.BASE_URL}/captains/voice?conferenceName=${encodeURIComponent(generatedConferenceName)}`,
+        to: `+${phoneNumber}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
          record: true, // Enable call recording
          recordingStatusCallback: `${process.env.BASE_URL}/captains/recording-callback`,
          recordingStatusCallbackEvent: ['completed'],
@@ -235,43 +239,42 @@ const initiateCallToUser = async (phoneNumber, rideId, captainId, conferenceName
       
              console.log(`Real call initiated with SID: ${call.sid}`);
        
-       // After user call is initiated, call the captain to join conference
-       if (conferenceName && captain.mobile) {
-         console.log(`Conference name: ${conferenceName}`);
-         console.log(`Calling captain ${captain.mobile} to join conference ${conferenceName}`);
-         
-         // Format captain's phone number with country code
-         let captainPhoneNumber = captain.mobile.replace(/\D/g, '');
-         
-         // Add country code if not present (assuming India +91)
-         if (!captainPhoneNumber.startsWith('91') && captainPhoneNumber.length === 10) {
-           captainPhoneNumber = '91' + captainPhoneNumber;
-         }
-         
-         console.log(`Formatted captain phone number: +${captainPhoneNumber}`);
-         
-         // Call captain to join conference with custom TwiML
-         const captainCall = await client.calls.create({
-           url: `${process.env.BASE_URL}/captains/captain-voice`,
-           to: `+${captainPhoneNumber}`,
-           from: process.env.TWILIO_PHONE_NUMBER,
-           statusCallback: `${process.env.BASE_URL}/captains/call-status-callback`,
-           statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
-           statusCallbackMethod: 'POST'
-         });
-         
-         console.log(`Captain call initiated with SID: ${captainCall.sid}`);
-       }
+               // After user call is initiated, call the captain to join conference
+        if (captain.mobile) {
+          console.log(`Calling captain ${captain.mobile} to join conference ${generatedConferenceName}`);
+          
+          // Format captain's phone number with country code
+          let captainPhoneNumber = captain.mobile.replace(/\D/g, '');
+          
+          // Add country code if not present (assuming India +91)
+          if (!captainPhoneNumber.startsWith('91') && captainPhoneNumber.length === 10) {
+            captainPhoneNumber = '91' + captainPhoneNumber;
+          }
+          
+          console.log(`Formatted captain phone number: +${captainPhoneNumber}`);
+          
+          // Call captain to join conference with custom TwiML
+          const captainCall = await client.calls.create({
+            url: `${process.env.BASE_URL}/captains/captain-voice?conferenceName=${encodeURIComponent(generatedConferenceName)}`,
+            to: `+${captainPhoneNumber}`,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            statusCallback: `${process.env.BASE_URL}/captains/call-status-callback`,
+            statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
+            statusCallbackMethod: 'POST'
+          });
+          
+          console.log(`Captain call initiated with SID: ${captainCall.sid}`);
+        }
        
-       return {
-         callId: call.sid,
-         status: call.status,
-         phoneNumber: `+${phoneNumber}`,
-         captainPhoneNumber: captain.mobile,
-         conferenceName: conferenceName,
-         timestamp: new Date().toISOString(),
-         message: "Real call initiated successfully via Twilio"
-       };
+               return {
+          callId: call.sid,
+          status: call.status,
+          phoneNumber: `+${phoneNumber}`,
+          captainPhoneNumber: captain.mobile,
+          conferenceName: generatedConferenceName,
+          timestamp: new Date().toISOString(),
+          message: "Real call initiated successfully via Twilio"
+        };
       
     } catch (twilioError) {
       console.error('Twilio error:', twilioError);

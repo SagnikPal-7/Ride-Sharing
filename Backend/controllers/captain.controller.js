@@ -168,13 +168,16 @@ const voiceResponse = async (req, res) => {
     console.log('From:', req.body.From);
     console.log('To:', req.body.To);
     console.log('CallSid:', req.body.CallSid);
+    console.log('Conference Name:', req.query.conferenceName || 'No conference name provided');
     console.log('===============================');
     
     // Set content type to XML for TwiML
     res.set('Content-Type', 'text/xml');
     
-    // Generate unique conference name
-    const conferenceName = `ride_${req.body.CallSid}_${Date.now()}`;
+    // Get conference name from query parameter or generate one
+    const conferenceName = req.query.conferenceName || `ride_${req.body.CallSid}_${Date.now()}`;
+    
+    console.log(`🎯 User joining conference: ${conferenceName}`);
     
     // Create TwiML response for conference call
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -203,7 +206,7 @@ const voiceResponse = async (req, res) => {
             statusCallbackEvent="start end join leave mute hold"
             statusCallbackMethod="POST"
         >
-            ride_conference_shared
+            ${conferenceName}
         </Conference>
     </Dial>
 </Response>`;
@@ -353,10 +356,16 @@ const captainVoiceResponse = async (req, res) => {
     console.log('From:', req.body.From);
     console.log('To:', req.body.To);
     console.log('CallSid:', req.body.CallSid);
+    console.log('Conference Name:', req.query.conferenceName || 'No conference name provided');
     console.log('===============================');
     
     // Set content type to XML for TwiML
     res.set('Content-Type', 'text/xml');
+    
+    // Get conference name from query parameter or generate one
+    const conferenceName = req.query.conferenceName || `ride_${req.body.CallSid}_${Date.now()}`;
+    
+    console.log(`🎯 Captain joining conference: ${conferenceName}`);
     
     // Create TwiML response for captain to join conference
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -383,7 +392,7 @@ const captainVoiceResponse = async (req, res) => {
             statusCallbackEvent="start end join leave mute hold"
             statusCallbackMethod="POST"
         >
-            ride_conference_shared
+            ${conferenceName}
         </Conference>
     </Dial>
 </Response>`;
@@ -392,6 +401,64 @@ const captainVoiceResponse = async (req, res) => {
   } catch (error) {
     console.error('Error in captain voice response:', error);
     res.status(500).send('Error');
+  }
+};
+
+// Update captain availability status
+const updateAvailability = async (req, res) => {
+  const { availability } = req.body;
+  const captainId = req.captain._id || req.captain.id;
+
+  if (!availability || !["available", "busy", "offline"].includes(availability)) {
+    return res.status(400).json({ 
+      message: "Invalid availability status. Must be: available, busy, or offline" 
+    });
+  }
+
+  try {
+    const updatedCaptain = await captainModel.findByIdAndUpdate(
+      captainId,
+      { 
+        availability,
+        "statistics.lastOnlineTime": new Date()
+      },
+      { new: true }
+    );
+
+    if (!updatedCaptain) {
+      return res.status(404).json({ message: "Captain not found" });
+    }
+
+    res.status(200).json({ 
+      message: "Availability updated successfully", 
+      captain: updatedCaptain 
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get captain statistics with enhanced data
+const getCaptainStats = async (req, res) => {
+  const captainId = req.captain._id || req.captain.id;
+
+  try {
+    const captain = await captainModel.findById(captainId)
+      .select('statistics rating availability vehicle location');
+
+    if (!captain) {
+      return res.status(404).json({ message: "Captain not found" });
+    }
+
+    res.status(200).json({ 
+      statistics: captain.statistics,
+      rating: captain.rating,
+      availability: captain.availability,
+      vehicle: captain.vehicle,
+      location: captain.location
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -411,5 +478,7 @@ module.exports = {
   voiceHandler,
   recordingCallback,
   conferenceStatus,
-  captainVoiceResponse
+  captainVoiceResponse,
+  updateAvailability,
+  getCaptainStats
 };

@@ -25,4 +25,8 @@ router.get("/logout", authMiddleware.authCaptain, captainController.logout);
 router.post("/initiate-call", authMiddleware.authCaptain, captainController.initiateCall);
 router.post("/join-conference", authMiddleware.authCaptain, captainController.joinConference);
 
+// New availability and stats routes
+router.put("/availability", authMiddleware.authCaptain, captainController.updateAvailability);
+router.get("/stats", authMiddleware.authCaptain, captainController.getCaptainStats);
+
 module.exports = router;
