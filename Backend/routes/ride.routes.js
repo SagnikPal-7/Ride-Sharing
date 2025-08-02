@@ -64,4 +64,17 @@ router.post(
   rideController.endRide
 );
 
+router.get(
+  "/details/:rideId",
+  authMiddleware.authUser,
+  rideController.getRideDetails
+);
+
+router.get(
+  "/route",
+  query("origin").isString().withMessage("Origin coordinates required"),
+  query("destination").isString().withMessage("Destination coordinates required"),
+  rideController.getRouteDetails
+);
+
 module.exports = router;

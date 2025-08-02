@@ -18,6 +18,24 @@ const rideSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // Add location coordinates for route tracking
+  pickupCoords: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
+  destinationCoords: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
+  // Current locations for live tracking
+  userLocation: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
+  captainLocation: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
   fare: {
     type: Number,
     required: true,

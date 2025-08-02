@@ -11,7 +11,7 @@ module.exports.createRide = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { userId, pickup, destination, vehicleType } = req.body;
+  const { userId, pickup, destination, vehicleType, pickupCoords, destinationCoords } = req.body;
 
   try {
     const ride = await rideService.createRide({
@@ -19,6 +19,8 @@ module.exports.createRide = async (req, res) => {
       pickup,
       destination,
       vehicleType,
+      pickupCoords,
+      destinationCoords,
     });
     res.status(201).json(ride);
 
@@ -155,5 +157,42 @@ module.exports.endRide = async (req, res) => {
     return res.status(200).json(updatedRide);
   } catch (err) {
     return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getRideDetails = async (req, res) => {
+  const { rideId } = req.params;
+
+  try {
+    const ride = await rideService.getRideById(rideId);
+    res.status(200).json(ride);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports.getRouteDetails = async (req, res) => {
+  const { origin, destination } = req.query;
+
+  try {
+    if (!origin || !destination) {
+      return res.status(400).json({ message: "Origin and destination are required" });
+    }
+
+    console.log("Route request received:", { origin, destination });
+
+    const originCoords = JSON.parse(origin);
+    const destinationCoords = JSON.parse(destination);
+
+    console.log("Parsed coordinates:", { originCoords, destinationCoords });
+
+    const route = await mapService.getRouteBetweenPoints(originCoords, destinationCoords);
+    
+    console.log("Route calculated with", route.length, "points");
+    
+    res.status(200).json({ route });
+  } catch (err) {
+    console.error("Route calculation error:", err);
+    return res.status(400).json({ message: err.message });
   }
 };

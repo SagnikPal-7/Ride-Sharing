@@ -43,7 +43,11 @@ const CaptainRiding = () => {
     <div className="h-screen w-full relative overflow-hidden">
       {/* Map Section - Absolute Full Coverage */}
       <div className="absolute inset-0 w-full h-full">
-        <LiveTracking />
+        <LiveTracking 
+          rideId={rideDate?._id}
+          isActiveRide={true}
+          userType="captain"
+        />
       </div>
 
       {/* Ride Control Panel - Minimal Floating Overlay */}

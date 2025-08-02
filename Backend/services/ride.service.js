@@ -68,6 +68,8 @@ module.exports.createRide = async ({
   pickup,
   destination,
   vehicleType,
+  pickupCoords,
+  destinationCoords,
 }) => {
   if (!user || !pickup || !destination || !vehicleType) {
     throw new Error("All fields are required");
@@ -79,6 +81,8 @@ module.exports.createRide = async ({
     user,
     pickup,
     destination,
+    pickupCoords,
+    destinationCoords,
     otp: getOtp(6),
     fare: fare[vehicleType],
   });

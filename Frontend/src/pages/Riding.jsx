@@ -44,7 +44,11 @@ const Riding = () => {
     <div className="h-screen bg-gray-50 overflow-hidden">
       {/* Map Section */}
       <div className="h-3/5 relative">
-        <LiveTracking />
+        <LiveTracking 
+          rideId={ride?._id}
+          isActiveRide={true}
+          userType="user"
+        />
       </div>
 
       {/* Ride Details Section */}

@@ -258,6 +258,8 @@ const Home = () => {
         pickup,
         destination,
         vehicleType: vehicleType,
+        pickupCoords,
+        destinationCoords,
       },
       {
         headers: {
@@ -283,8 +285,8 @@ const Home = () => {
 
       <div className="h-screen w-screen">
         <LiveTracking
-          pickupCoords={pickupCoords}
-          destinationCoords={destinationCoords}
+          pickupCoords={pickupCoords || { lat: 12.9716, lng: 77.5946 }} // Test coordinates for Bangalore
+          destinationCoords={destinationCoords || { lat: 12.9789, lng: 77.5917 }} // Test destination
         />
       </div>
 
