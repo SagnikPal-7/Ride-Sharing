@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.png";
-import bg from "../assets/Home.jpg";
+import bg from "../assets/home.jpg";
 import { Link } from "react-router-dom";
 
 const Start = () => {
