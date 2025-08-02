@@ -236,7 +236,7 @@ const Home = () => {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/rides/get-fare`,
+        `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/rides/get-fare`,
         {
           params: { pickup, destination },
           headers: {
@@ -253,7 +253,7 @@ const Home = () => {
 
   async function createRide() {
     const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+              `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/rides/create`,
       {
         pickup,
         destination,

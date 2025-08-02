@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import car2 from "../assets/Car2.webp";
@@ -9,12 +9,17 @@ import { useEffect, useContext } from "react";
 import { SocketContext } from "../context/SocketContext";
 import { useNavigate } from "react-router-dom";
 import LiveTracking from "../components/LiveTracking";
+import PaymentModal from "../components/PaymentModal";
+import Notification from "../components/Notification";
 
 const Riding = () => {
   const location = useLocation();
   const { ride } = location.state || {};
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: "", type: "success" });
 
   let vehicleImg = car2;
   if (ride.vehicleType === "auto") vehicleImg = auto;
@@ -25,6 +30,15 @@ const Riding = () => {
   socket.on("ride-ended", () => {
     navigate("/home");
   });
+
+  const handlePaymentSuccess = () => {
+    setPaymentCompleted(true);
+    setNotification({
+      show: true,
+      message: "Payment completed successfully!",
+      type: "success"
+    });
+  };
 
   return (
     <div className="h-screen bg-gray-50 overflow-hidden">
@@ -90,12 +104,36 @@ const Riding = () => {
           </div>
 
           {/* Action Button */}
-          <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 text-sm">
+          <button 
+            onClick={() => setShowPaymentModal(true)}
+            disabled={paymentCompleted}
+            className={`w-full font-semibold py-2 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 text-sm ${
+              paymentCompleted 
+                ? "bg-green-500 text-white cursor-not-allowed" 
+                : "bg-green-600 hover:bg-green-700 text-white"
+            }`}
+          >
             <i className="ri-bank-card-line"></i>
-            Make Payment
+            {paymentCompleted ? "Payment Completed" : "Make Payment"}
           </button>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        ride={ride}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+
+      {/* Notification */}
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        isVisible={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+      />
     </div>
   );
 };

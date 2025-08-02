@@ -130,14 +130,28 @@ module.exports.endRide = async (req, res) => {
   const { rideId } = req.body;
 
   try {
-    const ride = await rideService.endRide({ rideId, captain: req.captain });
+    // Check if payment is completed before ending the ride
+    const ride = await rideService.getRideById(rideId);
+    
+    if (!ride) {
+      return res.status(404).json({ message: "Ride not found" });
+    }
 
-    sendMessageToSocketId(ride.user.socketId, {
+    if (ride.paymentStatus !== "completed") {
+      return res.status(400).json({ 
+        message: "Payment not completed. Please complete the payment before finishing the ride.",
+        paymentStatus: ride.paymentStatus || "pending"
+      });
+    }
+
+    const updatedRide = await rideService.endRide({ rideId, captain: req.captain });
+
+    sendMessageToSocketId(updatedRide.user.socketId, {
       event: "ride-ended",
-      data: ride,
+      data: updatedRide,
     });
 
-    return res.status(200).json(ride);
+    return res.status(200).json(updatedRide);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

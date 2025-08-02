@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import userprofile from "../assets/userprofile.png";
 import { Link, useNavigate } from "react-router-dom";
 // import profile from "../assets/profile.png";
@@ -12,23 +12,33 @@ import axios from "axios";
 
 const FinishRide = (props) => {
   const navigate = useNavigate();
+  const [showPaymentAlert, setShowPaymentAlert] = useState(false);
 
   async function endRide() {
-    const response = await axios.post(
-      `/rides/end-ride`,
-      {
-        rideId: props.ride._id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+    try {
+      const response = await axios.post(
+        `/rides/end-ride`,
+        {
+          rideId: props.ride._id,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-    if (response.status === 200) {
-      props.setFinishRidePanel(false);
-      navigate("/captain-home");
+      if (response.status === 200) {
+        props.setFinishRidePanel(false);
+        navigate("/captain-home");
+      }
+    } catch (error) {
+      if (error.response?.status === 400 && error.response?.data?.message?.includes("Payment not completed")) {
+        setShowPaymentAlert(true);
+      } else {
+        console.error("Error ending ride:", error);
+        alert("Failed to end ride. Please try again.");
+      }
     }
   }
 
@@ -118,6 +128,29 @@ const FinishRide = (props) => {
           Click on finish ride button if you have completed the payment.
         </p>
       </div>
+
+      {/* Payment Alert Modal */}
+      {showPaymentAlert && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 max-w-md mx-4">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i className="ri-error-warning-line text-yellow-600 text-2xl"></i>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Payment Required</h3>
+              <p className="text-gray-600 mb-4">
+                The user has not completed the payment yet. Please wait for the payment to be completed before finishing the ride.
+              </p>
+              <button
+                onClick={() => setShowPaymentAlert(false)}
+                className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

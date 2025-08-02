@@ -7,7 +7,7 @@ const CaptainLogout = () => {
   const navigate = useNavigate();
 
   axios
-    .get(`${import.meta.env.VITE_BASE_URL}/captains/logout`, {
+          .get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/captains/logout`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

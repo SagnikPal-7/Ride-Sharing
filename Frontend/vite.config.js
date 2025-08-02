@@ -10,7 +10,8 @@ export default defineConfig({
       '/users': process.env.VITE_BACKEND_URL || 'http://localhost:4000',
       '/captains': process.env.VITE_BACKEND_URL || 'http://localhost:4000',
       '/maps': process.env.VITE_BACKEND_URL || 'http://localhost:4000',
-      '/rides': process.env.VITE_BACKEND_URL || 'http://localhost:4000'
+      '/rides': process.env.VITE_BACKEND_URL || 'http://localhost:4000',
+      '/payments': process.env.VITE_BACKEND_URL || 'http://localhost:4000'
     }
   }
 });

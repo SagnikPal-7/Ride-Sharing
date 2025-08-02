@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 export const SocketContext = createContext();
 
-const socket = io(`${import.meta.env.VITE_BASE_URL}`); // Change if backend runs elsewhere
+const socket = io(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}`); // Change if backend runs elsewhere
 
 const SocketProvider = ({ children }) => {
   useEffect(() => {
