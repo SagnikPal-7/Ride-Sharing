@@ -93,15 +93,22 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
   }
 };
 
-module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
+module.exports.getCaptainsInTheRadius = async (ltd, lng, radius, vehicleType = null) => {
   //in Km
-  const captains = await captainModel.find({
+  const query = {
     location: {
       $geoWithin: {
         $centerSphere: [[ltd, lng], radius / 6371],
       },
     },
-  });
+  };
+
+  // Add vehicle type filter if specified
+  if (vehicleType) {
+    query["vehicle.vehicleType"] = vehicleType;
+  }
+
+  const captains = await captainModel.find(query);
 
   return captains;
 };
