@@ -14,7 +14,7 @@ import CaptainLogout from "./pages/CaptainLogout";
 import Riding from "./pages/Riding";
 import Profile from "./pages/Profile";
 import CaptainRiding from "./pages/CaptainRiding";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
   return (
