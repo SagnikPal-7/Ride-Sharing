@@ -18,14 +18,11 @@ const CaptainDetails = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/captains/statistics`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("/captains/statistics", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.data.statistics) {
           setStatistics(response.data.statistics);
