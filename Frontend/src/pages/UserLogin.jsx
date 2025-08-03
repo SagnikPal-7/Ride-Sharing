@@ -21,7 +21,7 @@ const UserLogin = () => {
     };
 
     const response = await axios.post(
-      "/users/login",
+      `${import.meta.env.VITE_BACKEND_URL}/users/login`,
       userData
     );
 
