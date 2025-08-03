@@ -14,7 +14,8 @@ const RidePopUp = (props) => {
   // Function to get vehicle image based on vehicle type
   const getVehicleImage = (vehicleType) => {
     if (vehicleType === "auto") return auto;
-    else if (vehicleType === "moto" || vehicleType === "motorcycle") return bike;
+    else if (vehicleType === "moto" || vehicleType === "motorcycle")
+      return bike;
     else if (vehicleType === "car") return car2;
     return car2; // default to car
   };
@@ -23,18 +24,18 @@ const RidePopUp = (props) => {
   const handleCallUser = async () => {
     const phoneNumber = props.ride?.user?.mobile;
     if (!phoneNumber) {
-      alert('Phone number not available');
+      alert("Phone number not available");
       return;
     }
 
     setIsCalling(true);
-    
+
     try {
       const response = await axios.post(
-        '/captains/initiate-call',
+        `${import.meta.env.VITE_BACKEND_URL}/captains/initiate-call`,
         {
           userPhoneNumber: phoneNumber,
-          rideId: props.ride._id
+          rideId: props.ride._id,
         },
         {
           headers: {
@@ -46,17 +47,17 @@ const RidePopUp = (props) => {
       if (response.data.success) {
         // Show success message
         alert(`Call initiated to ${response.data.phoneNumber}`);
-        
+
         // In a real implementation, you might want to:
         // 1. Show a call status indicator
         // 2. Handle call events (ringing, answered, completed)
         // 3. Update UI based on call status
-        
-        console.log('Call initiated:', response.data);
+
+        console.log("Call initiated:", response.data);
       }
     } catch (error) {
-      console.error('Error initiating call:', error);
-      alert('Failed to initiate call. Please try again.');
+      console.error("Error initiating call:", error);
+      alert("Failed to initiate call. Please try again.");
     } finally {
       setIsCalling(false);
     }
@@ -107,14 +108,24 @@ const RidePopUp = (props) => {
             disabled={!props.ride?.user?.mobile || isCalling}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
               props.ride?.user?.mobile && !isCalling
-                ? 'bg-green-100 hover:bg-green-200 cursor-pointer' 
-                : 'bg-gray-100 cursor-not-allowed'
+                ? "bg-green-100 hover:bg-green-200 cursor-pointer"
+                : "bg-gray-100 cursor-not-allowed"
             }`}
-            title={props.ride?.user?.mobile ? (isCalling ? 'Calling...' : 'Call User') : 'Phone number not available'}
+            title={
+              props.ride?.user?.mobile
+                ? isCalling
+                  ? "Calling..."
+                  : "Call User"
+                : "Phone number not available"
+            }
           >
-            <i className={`ri-phone-fill text-sm ${
-              props.ride?.user?.mobile && !isCalling ? 'text-green-600' : 'text-gray-400'
-            } ${isCalling ? 'animate-pulse' : ''}`}></i>
+            <i
+              className={`ri-phone-fill text-sm ${
+                props.ride?.user?.mobile && !isCalling
+                  ? "text-green-600"
+                  : "text-gray-400"
+              } ${isCalling ? "animate-pulse" : ""}`}
+            ></i>
           </button>
         </div>
       </div>

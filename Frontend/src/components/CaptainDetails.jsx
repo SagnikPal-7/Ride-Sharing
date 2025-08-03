@@ -18,11 +18,14 @@ const CaptainDetails = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await axios.get("/captains/statistics", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/captains/statistics`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.data.statistics) {
           setStatistics(response.data.statistics);
@@ -33,10 +36,10 @@ const CaptainDetails = () => {
     };
 
     fetchStatistics();
-    
+
     // Refresh statistics every 30 seconds
     const interval = setInterval(fetchStatistics, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -62,13 +65,17 @@ const CaptainDetails = () => {
       <div className="flex p-3 mt-8 bg-gray-100 rounded-xl justify-center gap-5 items-start">
         <div className="text-center">
           <i className="text-3xl mb-2 font-thin ri-timer-line"></i>
-          <h5 className="text-lg font-medium">{statistics.hoursOnline.toFixed(1)}</h5>
+          <h5 className="text-lg font-medium">
+            {statistics.hoursOnline.toFixed(1)}
+          </h5>
           <p className="text-sm text-gray-600">Hours Online</p>
         </div>
 
         <div className="text-center">
           <i className="text-3xl mb-2 font-thin ri-speed-up-fill"></i>
-          <h5 className="text-lg font-medium">{statistics.distanceTravelled.toFixed(1)}</h5>
+          <h5 className="text-lg font-medium">
+            {statistics.distanceTravelled.toFixed(1)}
+          </h5>
           <p className="text-sm text-gray-600">Distance (km)</p>
         </div>
 

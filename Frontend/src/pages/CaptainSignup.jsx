@@ -40,7 +40,7 @@ const CaptainSignup = () => {
     };
 
     const response = await axios.post(
-      `/captains/register`,
+      `${import.meta.env.VITE_BACKEND_URL}/captains/register`,
       captainData
     );
 
