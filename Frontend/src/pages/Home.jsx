@@ -14,7 +14,6 @@ import { SocketContext } from "../context/SocketContext";
 import { UserDataContext } from "../context/UserContext";
 import LiveTracking from "../components/LiveTracking";
 
-
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
@@ -71,7 +70,9 @@ const Home = () => {
       const res = await (
         await import("axios")
       ).default.get(
-        `/maps/get-suggestions?input=${encodeURIComponent(input)}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/maps/get-suggestions?input=${encodeURIComponent(input)}`,
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
@@ -236,7 +237,9 @@ const Home = () => {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/rides/get-fare`,
+        `${
+          import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
+        }/rides/get-fare`,
         {
           params: { pickup, destination },
           headers: {
@@ -253,7 +256,9 @@ const Home = () => {
 
   async function createRide() {
     const response = await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/rides/create`,
+      `${
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
+      }/rides/create`,
       {
         pickup,
         destination,
@@ -286,7 +291,9 @@ const Home = () => {
       <div className="h-screen w-screen">
         <LiveTracking
           pickupCoords={pickupCoords || { lat: 12.9716, lng: 77.5946 }} // Test coordinates for Bangalore
-          destinationCoords={destinationCoords || { lat: 12.9789, lng: 77.5917 }} // Test destination
+          destinationCoords={
+            destinationCoords || { lat: 12.9789, lng: 77.5917 }
+          } // Test destination
         />
       </div>
 

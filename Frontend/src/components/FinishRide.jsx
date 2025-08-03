@@ -17,7 +17,7 @@ const FinishRide = (props) => {
   async function endRide() {
     try {
       const response = await axios.post(
-        `/rides/end-ride`,
+        `${import.meta.env.VITE_BACKEND_URL}/rides/end-ride`,
         {
           rideId: props.ride._id,
         },
@@ -33,7 +33,10 @@ const FinishRide = (props) => {
         navigate("/captain-home");
       }
     } catch (error) {
-      if (error.response?.status === 400 && error.response?.data?.message?.includes("Payment not completed")) {
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.message?.includes("Payment not completed")
+      ) {
         setShowPaymentAlert(true);
       } else {
         console.error("Error ending ride:", error);
@@ -139,7 +142,8 @@ const FinishRide = (props) => {
               </div>
               <h3 className="text-lg font-semibold mb-2">Payment Required</h3>
               <p className="text-gray-600 mb-4">
-                The user has not completed the payment yet. Please wait for the payment to be completed before finishing the ride.
+                The user has not completed the payment yet. Please wait for the
+                payment to be completed before finishing the ride.
               </p>
               <button
                 onClick={() => setShowPaymentAlert(false)}
