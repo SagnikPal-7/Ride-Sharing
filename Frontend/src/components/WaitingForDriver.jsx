@@ -23,7 +23,9 @@ const WaitingForDriver = (props) => {
     // Check if user has a phone number
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (!user.mobile) {
-      alert("Please update your profile with a phone number before making calls.");
+      alert(
+        "Please update your profile with a phone number before making calls."
+      );
       return;
     }
 
@@ -31,17 +33,20 @@ const WaitingForDriver = (props) => {
     setCallStatus("Initiating conference call...");
 
     try {
-      const response = await fetch(`/users/initiate-call`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          rideId: props.ride._id,
-          captainPhoneNumber: props.ride.captain.mobile,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/users/initiate-call`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            rideId: props.ride._id,
+            captainPhoneNumber: props.ride.captain.mobile,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -49,14 +54,18 @@ const WaitingForDriver = (props) => {
         if (data.mode === "test") {
           setCallStatus("Test mode: Conference call simulated successfully!");
         } else {
-          setCallStatus("Conference call initiated! You and your captain will receive calls to join the conference...");
+          setCallStatus(
+            "Conference call initiated! You and your captain will receive calls to join the conference..."
+          );
         }
         setTimeout(() => {
           setCallStatus("");
           setIsCalling(false);
         }, 5000); // Longer timeout for conference calls
       } else {
-        setCallStatus(`Error: ${data.error || "Failed to initiate conference call"}`);
+        setCallStatus(
+          `Error: ${data.error || "Failed to initiate conference call"}`
+        );
         setTimeout(() => {
           setCallStatus("");
           setIsCalling(false);
@@ -168,13 +177,15 @@ const WaitingForDriver = (props) => {
               </div>
             )}
           </button>
-          
+
           {callStatus && (
-            <div className={`mt-2 text-center text-sm font-medium ${
-              callStatus.includes("Error") || callStatus.includes("error")
-                ? "text-red-600"
-                : "text-green-600"
-            }`}>
+            <div
+              className={`mt-2 text-center text-sm font-medium ${
+                callStatus.includes("Error") || callStatus.includes("error")
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
               {callStatus}
             </div>
           )}
