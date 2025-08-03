@@ -14,7 +14,7 @@ const paymentRoutes = require("./routes/payment.routes");
 connectToDb();
 app.use(
   cors({
-    origin: "https://ride-sharing-frontend.vercel.app",
+    origin: "https://ride-sharing-psi.vercel.app",
     credentials: true,
   })
 );
