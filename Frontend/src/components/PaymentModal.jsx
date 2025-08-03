@@ -14,7 +14,7 @@ const PaymentModal = ({ isOpen, onClose, ride, onPaymentSuccess }) => {
     try {
       // Create payment intent and process payment on backend
       const response = await axios.post(
-        "/payments/process-payment",
+        `${import.meta.env.VITE_BACKEND_URL}/payments/process-payment`,
         {
           rideId: ride._id,
           amount: ride.fare,
@@ -111,4 +111,4 @@ const PaymentModal = ({ isOpen, onClose, ride, onPaymentSuccess }) => {
   );
 };
 
-export default PaymentModal; 
+export default PaymentModal;
