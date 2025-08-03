@@ -9,7 +9,7 @@ const UserLogout = () => {
   useEffect(() => {
     localStorage.removeItem("token"); // Remove token immediately
     axios
-      .get(`/users/logout`, {
+      .get(`${import.meta.env.VITE_BACKEND_URL}/users/logout`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

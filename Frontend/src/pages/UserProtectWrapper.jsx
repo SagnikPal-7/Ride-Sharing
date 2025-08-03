@@ -17,12 +17,15 @@ const UserProtectWrapper = ({ children }) => {
 
     const checkAuth = async () => {
       try {
-        const response = await axios.get("/users/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/users/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         if (response.status === 200) {
           setUser(response.data);
           setIsLoading(false);

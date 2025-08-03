@@ -17,21 +17,24 @@ const Profile = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await axios.get("/users/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const freshUserData = response.data;
       console.log("Fresh user data from backend:", freshUserData);
-      
+
       // Update context and localStorage with fresh data
       if (setUser) {
         setUser(freshUserData);
       }
       localStorage.setItem("user", JSON.stringify(freshUserData));
-      
+
       // Set phone state based on fresh data
       if (freshUserData.mobile) {
         setPhone(freshUserData.mobile);
@@ -47,7 +50,7 @@ const Profile = () => {
     console.log("User from context:", user);
     console.log("User from localStorage:", localStorage.getItem("user"));
     console.log("User mobile from context:", user?.mobile);
-    
+
     // Fetch fresh user data on component mount
     fetchUserData();
   }, []);
@@ -63,7 +66,7 @@ const Profile = () => {
       }
 
       const response = await axios.put(
-        "/users/update-phone",
+        `${import.meta.env.VITE_BACKEND_URL}/users/update-phone`,
         { phone },
         {
           headers: {
@@ -71,22 +74,22 @@ const Profile = () => {
           },
         }
       );
-      
+
       console.log("API Response:", response.data);
-      
+
       // Create updated user object with the new mobile number
       const updatedUser = { ...user, mobile: phone };
       console.log("Updated user object:", updatedUser);
-      
+
       // Update the user context
       if (setUser) {
         setUser(updatedUser);
       }
-      
+
       // Update localStorage with the new user data
       localStorage.setItem("user", JSON.stringify(updatedUser));
       console.log("Updated localStorage:", localStorage.getItem("user"));
-      
+
       setIsSaved(true);
       alert("Phone number saved successfully!");
     } catch (err) {
@@ -127,7 +130,7 @@ const Profile = () => {
       formData.append("profileImage", file);
 
       const response = await axios.put(
-        "/users/update-profile-image",
+        `${import.meta.env.VITE_BACKEND_URL}/users/update-profile-image`,
         formData,
         {
           headers: {
@@ -178,7 +181,9 @@ const Profile = () => {
                 src={user.profileImage}
                 alt="Profile"
                 className="w-full h-full object-cover"
-                onLoad={() => console.log("Image loaded successfully:", user.profileImage)}
+                onLoad={() =>
+                  console.log("Image loaded successfully:", user.profileImage)
+                }
                 onError={(e) => {
                   console.error("Image failed to load:", user.profileImage);
                   e.target.style.display = "none";
@@ -186,16 +191,18 @@ const Profile = () => {
                 }}
               />
             ) : null}
-            <i 
-              className={`ri-user-3-fill text-5xl text-gray-400 ${user?.profileImage ? 'hidden' : ''}`}
+            <i
+              className={`ri-user-3-fill text-5xl text-gray-400 ${
+                user?.profileImage ? "hidden" : ""
+              }`}
             ></i>
           </div>
-          <button 
+          <button
             onClick={triggerFileInput}
             disabled={imageLoading}
             className={`absolute bottom-0 right-0 rounded-full p-1 w-6 h-6 flex items-center justify-center ${
-              imageLoading 
-                ? "bg-gray-400 cursor-not-allowed" 
+              imageLoading
+                ? "bg-gray-400 cursor-not-allowed"
                 : "bg-gray-300 hover:bg-gray-400"
             }`}
           >
@@ -253,9 +260,7 @@ const Profile = () => {
                 </button>
               </>
             ) : (
-              <div className="text-base text-black">
-                {phone}
-              </div>
+              <div className="text-base text-black">{phone}</div>
             )}
           </div>
         </div>
